@@ -1,198 +1,364 @@
 "use client";
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, delay: i * 0.15, ease: "easeOut" as const },
+  }),
+};
 
 export default function Home() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <div className="overflow-x-hidden">
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black">
-        {/* Animated Background */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute w-full h-full">
-            {[...Array(20)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute bg-red-500/10 rounded-full blur-xl"
-                style={{
-                  width: Math.random() * 300 + 50,
-                  height: Math.random() * 300 + 50,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  x: [0, Math.random() * 100 - 50],
-                  y: [0, Math.random() * 100 - 50],
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: Math.random() * 10 + 10,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
-              />
-            ))}
-          </div>
+    <>
+      {/* ═══════════════════ HERO ═══════════════════ */}
+      <section ref={heroRef} className="relative h-screen min-h-[700px] overflow-hidden">
+        {/* Background Image */}
+        <motion.div style={{ y: heroY }} className="absolute inset-0">
+          <Image
+            src="/images/hero-racing.png"
+            alt="Racing"
+            fill
+            className="object-cover"
+            priority
+            quality={90}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/60 via-[#0A0A0A]/30 to-[#0A0A0A]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-transparent to-transparent" />
+        </motion.div>
+
+        {/* Speed Lines */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(5)].map((_, i) => (
+            <div
+              key={i}
+              className="speed-line absolute w-full"
+              style={{
+                top: `${20 + i * 15}%`,
+                animationDelay: `${i * 0.6}s`,
+                animationDuration: `${2 + i * 0.5}s`,
+              }}
+            />
+          ))}
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="font-orbitron text-5xl md:text-7xl lg:text-8xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                UNLEASH
-              </span>
-              <br />
-              <span className="text-white">THE SPEED</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
-              Professional racing gear, championship-winning teams, and the latest motorsport news - all in one place.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/speed-shop"
-                className="bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 shadow-lg shadow-red-500/50 hover:shadow-red-500/75 hover:scale-105"
+        {/* Hero Content */}
+        <motion.div
+          style={{ opacity: heroOpacity }}
+          className="relative z-10 h-full flex items-center"
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="max-w-3xl">
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                className="space-y-6"
               >
-                Shop Now
-              </Link>
-              <Link
-                href="/racing-team"
-                className="border-2 border-white/20 hover:border-red-500 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:bg-red-500/10"
-              >
-                Join Our Team
-              </Link>
-            </div>
-          </motion.div>
+                <motion.div variants={fadeUp} custom={0}>
+                  <span className="inline-block px-4 py-1.5 bg-[#F5A623]/10 border border-[#F5A623]/30 rounded text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">
+                    Indonesia's #1 Racing Team
+                  </span>
+                </motion.div>
 
-          {/* Stats */}
+                <motion.h1
+                  variants={fadeUp}
+                  custom={1}
+                  className="font-orbitron text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tight"
+                >
+                  <span className="text-white">SUPER</span>
+                  <span className="text-gradient-orange">SPEED</span>
+                  <br />
+                  <span className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+                    RACING TEAM
+                  </span>
+                </motion.h1>
+
+                <motion.p
+                  variants={fadeUp}
+                  custom={2}
+                  className="text-lg md:text-xl text-gray-300 max-w-xl leading-relaxed"
+                >
+                  Championship-winning performance. Professional racing gear. 
+                  The latest motorsport technology — all under one roof.
+                </motion.p>
+
+                <motion.div
+                  variants={fadeUp}
+                  custom={3}
+                  className="flex flex-wrap gap-4 pt-2"
+                >
+                  <Link
+                    href="/speed-shop"
+                    className="btn-racing px-8 py-4 rounded text-sm uppercase tracking-wider"
+                  >
+                    Explore Speed Shop
+                  </Link>
+                  <Link
+                    href="/racing-team"
+                    className="btn-outline-racing px-8 py-4 rounded text-sm uppercase tracking-wider"
+                  >
+                    Meet The Team
+                  </Link>
+                </motion.div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Bottom Fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#0A0A0A] to-transparent z-20" />
+      </section>
+
+      {/* ═══════════════════ STATS BAR ═══════════════════ */}
+      <section className="relative z-30 -mt-20">
+        <div className="max-w-6xl mx-auto px-4">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-4 bg-[#1A1A1A] carbon-texture rounded-lg border border-[#F5A623]/10 overflow-hidden"
           >
             {[
-              { value: "500+", label: "Products" },
-              { value: "50+", label: "Team Members" },
-              { value: "100+", label: "Championships" },
-              { value: "24/7", label: "Support" },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-orbitron font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent mb-2">
+              { value: "150+", label: "Race Wins", icon: "🏆" },
+              { value: "35", label: "Championships", icon: "🥇" },
+              { value: "500+", label: "Products", icon: "🛒" },
+              { value: "24/7", label: "Support", icon: "📞" },
+            ].map((stat, i) => (
+              <div
+                key={i}
+                className={`p-8 text-center ${
+                  i < 3 ? "border-r border-white/5" : ""
+                } hover:bg-[#F5A623]/5 transition-colors duration-300`}
+              >
+                <div className="text-3xl mb-2">{stat.icon}</div>
+                <div className="font-orbitron text-3xl md:text-4xl font-black text-gradient-orange">
                   {stat.value}
                 </div>
-                <div className="text-gray-400 text-sm md:text-base">{stat.label}</div>
+                <div className="text-xs uppercase tracking-[0.2em] text-gray-400 mt-1">
+                  {stat.label}
+                </div>
               </div>
             ))}
           </motion.div>
         </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          <svg
-            className="w-6 h-6 text-red-500"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 14l-7 7m0 0l-7-7m7 7V3"
-            />
-          </svg>
-        </motion.div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-black to-gray-900">
+      {/* ═══════════════════ FEATURED SECTIONS ═══════════════════ */}
+      <section className="py-32 tech-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-                Why Choose Us
-              </span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">
+              What We Offer
+            </span>
+            <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
+              BUILT FOR <span className="text-gradient-orange">CHAMPIONS</span>
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Industry-leading quality, championship-proven performance
-            </p>
           </motion.div>
 
+          {/* Three Pillars */}
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                icon: "🏆",
-                title: "Championship Proven",
-                description: "Equipment trusted by winning teams worldwide",
+                title: "Speed Shop",
+                desc: "Premium racing gear from world-class brands. Helmets, suits, gloves, performance parts — everything a racer needs.",
+                image: "/images/speed-shop-banner.png",
+                link: "/speed-shop",
+                cta: "Browse Shop",
               },
               {
-                icon: "⚡",
-                title: "Lightning Fast Delivery",
-                description: "Get your gear delivered at racing speed",
+                title: "Racing Team",
+                desc: "Meet our championship-winning squad. Professional drivers, world-class engineers, relentless pursuit of victory.",
+                image: "/images/racing-team.png",
+                link: "/racing-team",
+                cta: "Meet The Team",
               },
               {
-                icon: "🛡️",
-                title: "Safety First",
-                description: "All products meet international safety standards",
+                title: "Motorsport Blog",
+                desc: "Expert insights, race recaps, tech deep-dives, and behind-the-scenes stories from the world of professional racing.",
+                image: "/images/blog-motorsport.png",
+                link: "/blog",
+                cta: "Read Articles",
               },
-            ].map((feature, index) => (
+            ].map((item, i) => (
               <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="bg-gradient-to-br from-gray-900 to-black p-8 rounded-2xl border border-red-500/20 hover:border-red-500/50 transition-all duration-300 group hover:scale-105"
+                transition={{ delay: i * 0.15 }}
               >
-                <div className="text-6xl mb-4 group-hover:scale-110 transition-transform">
-                  {feature.icon}
-                </div>
-                <h3 className="font-bold text-2xl mb-3 text-white">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+                <Link href={item.link} className="group block">
+                  <div className="relative overflow-hidden rounded-lg glow-border bg-[#1A1A1A]">
+                    {/* Image */}
+                    <div className="relative h-64 overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1A1A1A] via-transparent to-transparent" />
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-8 -mt-8 relative">
+                      <h3 className="font-orbitron text-xl font-bold text-white mb-3 group-hover:text-[#F5A623] transition-colors">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-400 text-sm leading-relaxed mb-6">
+                        {item.desc}
+                      </p>
+                      <span className="text-[#F5A623] text-sm font-bold uppercase tracking-wider flex items-center gap-2 group-hover:gap-4 transition-all">
+                        {item.cta}
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-red-600 to-orange-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="font-orbitron text-4xl md:text-5xl font-bold mb-6 text-white">
-              Ready to Race?
-            </h2>
-            <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
-              Join thousands of racers who trust SuperSpeed for their championship runs
-            </p>
-            <Link
-              href="/speed-shop"
-              className="inline-block bg-black hover:bg-gray-900 text-white px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105 shadow-2xl"
+      {/* ═══════════════════ FEATURED PRODUCT ═══════════════════ */}
+      <section className="py-24 bg-[#0A0A0A]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Image */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="relative"
             >
-              Start Shopping
-            </Link>
+              <div className="relative aspect-square rounded-lg overflow-hidden glow-border">
+                <Image
+                  src="/images/helmet-product.png"
+                  alt="Featured Helmet"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              {/* Decorative elements */}
+              <div className="absolute -bottom-4 -right-4 w-32 h-32 border border-[#F5A623]/20 rounded-lg" />
+              <div className="absolute -top-4 -left-4 w-20 h-20 border border-[#F5A623]/10 rounded-lg" />
+            </motion.div>
+
+            {/* Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">
+                Featured Product
+              </span>
+              <h2 className="font-orbitron text-4xl md:text-5xl font-black leading-tight">
+                NEXUS PRO
+                <br />
+                <span className="text-gradient-orange">CARBON HELMET</span>
+              </h2>
+              <p className="text-gray-400 leading-relaxed">
+                Engineered for the ultimate in protection and aerodynamics. 
+                Full carbon fiber shell, advanced ventilation system, and FIA 8859-2015 certified. 
+                The choice of champions.
+              </p>
+              <ul className="space-y-3">
+                {[
+                  "Full carbon fiber construction — 1,250g ultralight",
+                  "Advanced anti-fog visor with tear-off system",
+                  "FIA 8859-2015 & Snell SA2020 certified",
+                  "Integrated hydration & communication system",
+                ].map((feature, i) => (
+                  <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
+                    <span className="text-[#F5A623] mt-0.5">▸</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <div className="flex items-center gap-6 pt-4">
+                <Link
+                  href="/speed-shop"
+                  className="btn-racing px-8 py-4 rounded text-sm uppercase tracking-wider"
+                >
+                  Shop Now — Rp 28.000.000
+                </Link>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════ CTA ═══════════════════ */}
+      <section className="relative py-32 overflow-hidden" id="contact">
+        {/* Background */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/car-closeup.png"
+            alt="Race car"
+            fill
+            className="object-cover opacity-30"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/90 to-[#0A0A0A]/70" />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <h2 className="font-orbitron text-4xl md:text-6xl font-black">
+              READY TO
+              <br />
+              <span className="text-gradient-orange">RACE WITH US?</span>
+            </h2>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Whether you're looking for championship-grade equipment or want to join 
+              our racing program, we're ready to help you reach the podium.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link
+                href="/speed-shop"
+                className="btn-racing px-10 py-4 rounded text-sm uppercase tracking-wider"
+              >
+                Visit Speed Shop
+              </Link>
+              <Link
+                href="/racing-team"
+                className="btn-outline-racing px-10 py-4 rounded text-sm uppercase tracking-wider"
+              >
+                Join Racing Team
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
-    </div>
+    </>
   );
 }

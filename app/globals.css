@@ -1,33 +1,74 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #000000;
-    --foreground: #ffffff;
-  }
+  --speed-orange: #F5A623;
+  --speed-orange-light: #FFB84D;
+  --speed-dark: #0A0A0A;
+  --speed-carbon: #1A1A1A;
+  --speed-steel: #2A2A2A;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  color: #ffffff;
+  background: #0A0A0A;
+  font-family: var(--font-inter), system-ui, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-  
-  .font-orbitron {
-    font-family: var(--font-orbitron), sans-serif;
-  }
+/* Carbon fiber texture overlay */
+.carbon-texture {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.02) 2px,
+    rgba(255, 255, 255, 0.02) 4px
+  );
+}
+
+/* Tech grid background */
+.tech-grid {
+  background-image: 
+    linear-gradient(rgba(245, 166, 35, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245, 166, 35, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Glowing orange border */
+.glow-border {
+  border: 1px solid rgba(245, 166, 35, 0.2);
+  transition: all 0.4s ease;
+}
+.glow-border:hover {
+  border-color: rgba(245, 166, 35, 0.6);
+  box-shadow: 0 0 30px rgba(245, 166, 35, 0.15), inset 0 0 30px rgba(245, 166, 35, 0.05);
+}
+
+/* Speed lines animation */
+.speed-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 166, 35, 0.6), transparent);
+  animation: speedLine 3s linear infinite;
+}
+
+@keyframes speedLine {
+  0% { transform: translateX(-100%); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateX(300%); opacity: 0; }
+}
+
+/* Gradient text */
+.text-gradient-orange {
+  background: linear-gradient(135deg, #F5A623, #FFB84D, #F5A623);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Racing stripe */
+.racing-stripe {
+  background: linear-gradient(90deg, transparent 0%, rgba(245,166,35,0.1) 50%, transparent 100%);
 }
 
 /* Smooth scrolling */
@@ -37,18 +78,66 @@ html {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: #0A0A0A;
 }
-
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #dc2626, #ea580c);
-  border-radius: 5px;
+  background: linear-gradient(to bottom, #F5A623, #D4891A);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #FFB84D, #F5A623);
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #ef4444, #f97316);
+/* Selection color */
+::selection {
+  background: rgba(245, 166, 35, 0.3);
+  color: #ffffff;
+}
+
+/* Image overlay gradient */
+.overlay-gradient {
+  background: linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.8) 70%, #0A0A0A 100%);
+}
+
+/* Scanline effect */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+}
+
+/* Button hover lift */
+.btn-racing {
+  background: linear-gradient(135deg, #F5A623, #D4891A);
+  color: #0A0A0A;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
+}
+.btn-racing:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(245, 166, 35, 0.5);
+}
+
+.btn-outline-racing {
+  border: 2px solid rgba(245, 166, 35, 0.5);
+  color: #F5A623;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+.btn-outline-racing:hover {
+  background: rgba(245, 166, 35, 0.1);
+  border-color: #F5A623;
+  box-shadow: 0 0 20px rgba(245, 166, 35, 0.2);
 }
