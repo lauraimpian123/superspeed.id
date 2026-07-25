@@ -35,9 +35,9 @@ export default function Footer() {
             <Image
               src="/logo-superspeed.png"
               alt="SuperSpeed Racing Team"
-              width={200}
-              height={55}
-              className="h-14 w-auto object-contain"
+              width={280}
+              height={75}
+              className="h-18 md:h-20 w-auto object-contain"
             />
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
               Indonesia's premier racing team and speed shop. Championship-winning 
