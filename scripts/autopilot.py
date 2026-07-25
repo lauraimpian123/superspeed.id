@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-SuperSpeed.id Blog Autopilot v1.0
-Generates 1 SEO-optimized article per day about Indonesian motorcycle culture.
+SuperSpeed.id Blog Autopilot v2.0
+Generates 1 SEO-optimized, human-quality article per day.
 
 Categories: Motor Matic (30%), Superbike & Sport (25%), Motocross & Adventure (20%), Review Part Racing (25%)
-Pipeline: GPT-4o-mini (draft) → GPT-4o (polish + SEO)
+Pipeline: Claude Sonnet 4.5 (draft — human-like) → Claude Sonnet 4.5 (SEO polish)
 Output: JSON article files in content/articles/
 """
 
@@ -28,15 +28,16 @@ ARTICLES_DIR = os.path.join(PROJECT_DIR, "content", "articles")
 STATE_FILE = os.path.join(PROJECT_DIR, "content", "state.json")
 LOG_FILE = os.path.join(PROJECT_DIR, "content", "autopilot.log")
 
-API_KEY = os.environ.get("OPENAI_API_KEY", "")
-if not API_KEY:
-    # Try loading from credentials
+ANTHROPIC_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+if not ANTHROPIC_KEY:
     creds_file = os.path.expanduser("~/.openclaw/workspace/.secrets/credentials.env")
     if os.path.exists(creds_file):
         with open(creds_file) as f:
             for line in f:
-                if line.startswith("OPENAI_API_KEY="):
-                    API_KEY = line.strip().split("=", 1)[1]
+                if line.startswith("ANTHROPIC_API_KEY="):
+                    ANTHROPIC_KEY = line.strip().split("=", 1)[1]
+
+CLAUDE_MODEL = "claude-sonnet-4-5-20250929"
 
 AUTHOR = "SuperSpeed Racing Team"
 SITE_URL = "https://superspeed.id"
@@ -296,161 +297,127 @@ def slugify(text):
     text = text.strip('-')
     return text[:80]
 
-def call_openai(messages, model="gpt-4o-mini", max_tokens=4000):
-    """Call OpenAI API."""
+def call_claude(system_prompt, user_prompt, max_tokens=8000):
+    """Call Anthropic Claude API — produces natural, human-like writing."""
     body = json.dumps({
-        "model": model,
-        "messages": messages,
+        "model": CLAUDE_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.8,
+        "temperature": 0.9,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": user_prompt}],
     }).encode()
     
     req = urllib.request.Request(
-        "https://api.openai.com/v1/chat/completions",
+        "https://api.anthropic.com/v1/messages",
         data=body,
         headers={
-            "Authorization": f"Bearer {API_KEY}",
+            "x-api-key": ANTHROPIC_KEY,
+            "anthropic-version": "2023-06-01",
             "Content-Type": "application/json",
         },
     )
     
-    resp = urllib.request.urlopen(req, timeout=120)
+    resp = urllib.request.urlopen(req, timeout=180)
     data = json.loads(resp.read())
-    return data["choices"][0]["message"]["content"]
+    return data["content"][0]["text"]
 
 # ═══════════════════════════════════════════════════════════════
 # Article Generation
 # ═══════════════════════════════════════════════════════════════
 
 def generate_article(topic, category, content_type):
-    """2-stage pipeline: GPT-4o-mini draft → GPT-4o polish."""
+    """Single-stage Claude Sonnet 4.5 — human-quality writing + SEO."""
     
     today = datetime.date.today().isoformat()
     
-    # Stage 1: Draft with GPT-4o-mini
-    log(f"  Stage 1: Drafting with GPT-4o-mini...")
-    draft_prompt = f"""Kamu adalah jurnalis otomotif profesional Indonesia yang menulis untuk SuperSpeed.id — website racing team dan toko part otomotif racing.
+    log(f"  Generating with Claude Sonnet 4.5...")
 
-Tulis artikel lengkap dengan topik: "{topic}"
+    system_prompt = """Kamu adalah penulis otomotif berpengalaman yang sudah 15 tahun berkecimpung di dunia motor Indonesia. Kamu menulis untuk SuperSpeed.id — website racing team yang juga punya toko part racing.
+
+GAYA PENULISAN (SANGAT PENTING):
+- Tulis seperti manusia sungguhan, BUKAN seperti AI
+- Gunakan bahasa sehari-hari yang natural, sesekali campuran bahasa gaul otomotif
+- Masukkan opini pribadi, pengalaman, dan cerita anekdot
+- Sesekali gunakan kalimat pendek untuk penekanan. Satu kata. Boom.
+- Variasikan panjang paragraf — ada yang pendek, ada yang panjang
+- Gunakan analogi yang relatable untuk pembaca Indonesia
+- Hindari frasa klise AI seperti "perlu dicatat", "yang tak kalah penting", "dalam dunia otomotif"
+- JANGAN gunakan emoji atau simbol dekoratif
+- Berani kasih verdict jujur — kalau jelek bilang jelek, kalau bagus bilang bagus
+- Tulis seolah kamu sedang ngobrol dengan teman yang minta rekomendasi motor
+
+TEKNIS:
+- Bahasa Indonesia natural, engaging, conversational
+- 2500-3500 kata
+- Format HTML: h2, h3, p, ul, li, strong, em, blockquote, table
+- Masukkan 3-5 internal link: <a href="/speed-shop">teks</a>, <a href="/racing-team">teks</a>, <a href="/blog">teks</a>
+- Data spesifik: harga Rupiah, CC, HP, torsi, berat — jangan asal tebak
+- Paragraf pembuka yang langsung hook pembaca (bukan penjelasan generik)
+
+Output HANYA JSON valid (tanpa markdown code block):
+{
+  "title": "Judul menarik (max 60 char)",
+  "excerpt": "Meta description compelling 155-160 char",
+  "content": "Full HTML artikel",
+  "tags": ["5 tags relevan"],
+  "faq": [{"question": "...", "answer": "..."}] (5 FAQ),
+  "readTime": "X menit",
+  "metaTitle": "SEO Title ≤60 char | SuperSpeed.id",
+  "metaDescription": "SEO desc 155-160 char dengan keyword"
+}"""
+
+    user_prompt = f"""Tulis artikel berkualitas tinggi tentang:
+
+Topik: "{topic}"
 Kategori: {category}
-Tipe konten: {content_type}
+Tipe: {content_type}
 
-ATURAN PENULISAN:
-1. Tulis dalam Bahasa Indonesia yang natural dan engaging
-2. Panjang artikel: 2000-3000 kata
-3. Gunakan heading H2 dan H3 yang SEO-friendly
-4. Setiap paragraf maksimal 3-4 kalimat (scannable)
-5. Sertakan data spesifik: harga, spesifikasi, angka
-6. Gunakan format HTML (h2, h3, p, ul, li, strong, em, blockquote, table)
-7. JANGAN gunakan emoji atau simbol dekoratif di body artikel
-8. Sertakan internal link ke halaman SuperSpeed: /speed-shop, /racing-team, /blog
-9. Tulis dengan gaya informatif tapi tetap engaging, bukan kaku
+STRUKTUR:
+1. Opening hook yang bikin orang mau baca terus (bukan "Dalam dunia otomotif...")
+2. 4-6 section H2 yang informatif
+3. Sub-section H3 jika perlu
+4. Tabel spesifikasi (jika review produk)
+5. Verdict / kesimpulan yang tegas
+6. 5 FAQ
 
-STRUKTUR WAJIB:
-- Paragraf pembuka (hook + konteks)
-- 4-6 section dengan H2
-- Sub-section dengan H3 jika perlu
-- Tabel spesifikasi (jika review produk)
-- Kesimpulan / verdict
-- 5 FAQ (pertanyaan + jawaban singkat)
+INGAT: Tulis seperti penulis manusia yang punya pengalaman nyata, bukan AI yang generate konten. Masukkan detail kecil yang hanya diketahui orang yang benar-benar pakai motornya."""
 
-Output dalam format JSON:
-{{
-  "title": "Judul artikel (max 60 karakter untuk SEO)",
-  "excerpt": "Ringkasan 155-160 karakter untuk meta description",
-  "content": "Konten HTML lengkap artikel",
-  "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
-  "faq": [
-    {{"question": "Pertanyaan?", "answer": "Jawaban singkat."}},
-    ...5 FAQ
-  ],
-  "readTime": "X menit"
-}}
-
-PENTING: Output HANYA JSON valid, tanpa markdown code block."""
-
-    draft_raw = call_openai([
-        {"role": "system", "content": "Kamu adalah jurnalis otomotif Indonesia profesional. Output HANYA JSON valid."},
-        {"role": "user", "content": draft_prompt},
-    ], model="gpt-4o-mini", max_tokens=6000)
+    raw = call_claude(system_prompt, user_prompt, max_tokens=8000)
     
-    # Parse JSON from response
+    # Parse JSON
     try:
-        # Clean potential markdown wrapping
-        draft_raw = draft_raw.strip()
-        if draft_raw.startswith("```"):
-            draft_raw = draft_raw.split("\n", 1)[1].rsplit("```", 1)[0]
-        draft = json.loads(draft_raw)
+        raw = raw.strip()
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0]
+        data = json.loads(raw)
     except json.JSONDecodeError as e:
-        log(f"  ❌ JSON parse error in draft: {e}")
-        # Try to extract JSON
+        log(f"  JSON parse attempt 2...")
         import re
-        match = re.search(r'\{[\s\S]*\}', draft_raw)
+        match = re.search(r'\{[\s\S]*\}', raw)
         if match:
-            draft = json.loads(match.group())
+            data = json.loads(match.group())
         else:
             raise
 
-    # Stage 2: Polish with GPT-4o (SEO + quality)
-    log(f"  Stage 2: Polishing with GPT-4o...")
-    polish_prompt = f"""Review dan polish artikel ini untuk SEO maksimal:
-
-Judul: {draft.get('title', topic)}
-Kategori: {category}
-
-Artikel saat ini:
-{json.dumps(draft, ensure_ascii=False)[:3000]}
-
-TUGAS:
-1. Pastikan meta title ≤ 60 karakter, mengandung keyword utama
-2. Pastikan meta description 155-160 karakter, compelling, keyword-rich
-3. Pastikan heading H2 mengandung keyword variasi
-4. Tambahkan internal link ke /speed-shop atau /racing-team jika relevan (format: <a href="/speed-shop">teks</a>)
-5. Pastikan minimal 3 internal link dalam artikel
-6. Pastikan artikel mengalir natural, tidak robotic
-
-Output JSON:
-{{
-  "metaTitle": "Title SEO ≤60 char | SuperSpeed.id",
-  "metaDescription": "Description SEO 155-160 char",
-  "improvedContent": "Konten HTML yang sudah di-polish (atau null jika sudah bagus)"
-}}
-
-Output HANYA JSON valid."""
-
-    polish_raw = call_openai([
-        {"role": "system", "content": "Kamu adalah SEO specialist. Output HANYA JSON valid."},
-        {"role": "user", "content": polish_prompt},
-    ], model="gpt-4o", max_tokens=2000)
-
-    try:
-        polish_raw = polish_raw.strip()
-        if polish_raw.startswith("```"):
-            polish_raw = polish_raw.split("\n", 1)[1].rsplit("```", 1)[0]
-        polish = json.loads(polish_raw)
-    except:
-        polish = {}
-
-    # Assemble final article
-    slug = slugify(draft.get("title", topic))
+    slug = slugify(data.get("title", topic))
     
     article = {
         "slug": slug,
-        "title": draft.get("title", topic),
-        "excerpt": draft.get("excerpt", ""),
-        "content": polish.get("improvedContent") or draft.get("content", ""),
+        "title": data.get("title", topic),
+        "excerpt": data.get("excerpt", ""),
+        "content": data.get("content", ""),
         "category": category,
         "contentType": content_type,
-        "tags": draft.get("tags", []),
+        "tags": data.get("tags", []),
         "author": AUTHOR,
         "datePublished": today,
         "dateModified": today,
-        "readTime": draft.get("readTime", "8 menit"),
+        "readTime": data.get("readTime", "8 menit"),
         "featured": False,
         "featuredImage": "/images/blog-motorsport.png",
-        "metaTitle": polish.get("metaTitle", f"{draft.get('title', topic)} | SuperSpeed.id"),
-        "metaDescription": polish.get("metaDescription", draft.get("excerpt", "")),
-        "faq": draft.get("faq", []),
+        "metaTitle": data.get("metaTitle", f"{data.get('title', topic)} | SuperSpeed.id"),
+        "metaDescription": data.get("metaDescription", data.get("excerpt", "")),
+        "faq": data.get("faq", []),
         "relatedSlugs": [],
     }
     
@@ -465,8 +432,8 @@ def main():
     log("SuperSpeed.id Blog Autopilot v1.0")
     log("=" * 60)
     
-    if not API_KEY:
-        log("❌ OPENAI_API_KEY not set!")
+    if not ANTHROPIC_KEY:
+        log("❌ ANTHROPIC_API_KEY not set!")
         sys.exit(1)
     
     os.makedirs(ARTICLES_DIR, exist_ok=True)
