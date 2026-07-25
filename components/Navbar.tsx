@@ -37,9 +37,9 @@ export default function Navbar() {
             <Image
               src="/logo-superspeed.png"
               alt="SuperSpeed Racing Team"
-              width={300}
-              height={80}
-              className="h-16 md:h-20 w-auto object-contain"
+              width={400}
+              height={100}
+              className="h-20 md:h-24 w-auto object-contain"
               priority
             />
             <div className="absolute -inset-2 bg-[#F5A623]/0 group-hover:bg-[#F5A623]/5 rounded-lg transition-all duration-300" />
