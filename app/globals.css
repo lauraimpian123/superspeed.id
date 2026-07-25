@@ -91,6 +91,59 @@ html {
   background: linear-gradient(to bottom, #FFB84D, #F5A623);
 }
 
+/* Article table styling */
+article table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: #1A1A1A;
+  border: 1px solid rgba(245, 166, 35, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+article table th {
+  background: rgba(245, 166, 35, 0.1);
+  color: #F5A623;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid rgba(245, 166, 35, 0.2);
+}
+article table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #d1d5db;
+  font-size: 0.9rem;
+}
+article table tr:last-child td {
+  border-bottom: none;
+}
+article table tr:hover td {
+  background: rgba(245, 166, 35, 0.03);
+}
+
+/* Article content styling */
+article h2 {
+  border-left: 3px solid #F5A623;
+  padding-left: 12px;
+}
+article blockquote {
+  border-left: 3px solid #F5A623;
+  background: rgba(245, 166, 35, 0.05);
+  padding: 16px 20px;
+  border-radius: 0 8px 8px 0;
+  margin: 1.5rem 0;
+}
+article ul, article ol {
+  padding-left: 1.5rem;
+}
+article li {
+  margin-bottom: 0.5rem;
+}
+
 /* Selection color */
 ::selection {
   background: rgba(245, 166, 35, 0.3);
