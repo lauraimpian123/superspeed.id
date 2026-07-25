@@ -15,10 +15,10 @@ const footerLinks = {
     { name: "Accessories", href: "/speed-shop" },
   ],
   company: [
-    { name: "About Us", href: "#" },
-    { name: "Partnerships", href: "#" },
-    { name: "Careers", href: "#" },
-    { name: "Privacy Policy", href: "#" },
+    { name: "About Us", href: "/about" },
+    { name: "Partnerships", href: "/partnerships" },
+    { name: "Careers", href: "/careers" },
+    { name: "Privacy Policy", href: "/privacy-policy" },
   ],
 };
 
