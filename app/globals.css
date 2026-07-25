@@ -91,57 +91,137 @@ html {
   background: linear-gradient(to bottom, #FFB84D, #F5A623);
 }
 
-/* Article table styling */
-article table {
+/* ══════════════════════════════════════════════
+   Article Content Styling (detik.com style)
+   ══════════════════════════════════════════════ */
+
+/* Spacing between all elements */
+.article-content > * {
+  margin-bottom: 1.5rem;
+}
+.article-content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* Paragraphs */
+.article-content p {
+  color: #d1d5db;
+  font-size: 1.05rem;
+  line-height: 1.85;
+  margin-bottom: 1.5rem;
+}
+
+/* Headings */
+.article-content h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  border-left: 4px solid #F5A623;
+  padding-left: 16px;
+  margin-top: 3rem;
+  margin-bottom: 1.25rem;
+}
+.article-content h3 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* Lists */
+.article-content ul,
+.article-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.article-content li {
+  color: #d1d5db;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
+  padding-left: 0.25rem;
+}
+.article-content ul li {
+  list-style-type: disc;
+}
+.article-content ol li {
+  list-style-type: decimal;
+}
+
+/* Bold & Italic */
+.article-content strong {
+  color: #F5A623;
+  font-weight: 700;
+}
+.article-content em {
+  color: #e5e7eb;
+  font-style: italic;
+}
+
+/* Links */
+.article-content a {
+  color: #F5A623;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(245, 166, 35, 0.3);
+  transition: border-color 0.2s;
+}
+.article-content a:hover {
+  border-bottom-color: #F5A623;
+}
+
+/* Blockquote */
+.article-content blockquote {
+  border-left: 4px solid #F5A623;
+  background: rgba(245, 166, 35, 0.05);
+  padding: 20px 24px;
+  border-radius: 0 8px 8px 0;
+  margin: 2rem 0;
+  color: #9ca3af;
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+.article-content blockquote p {
+  margin-bottom: 0;
+}
+
+/* Tables */
+.article-content table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1.5rem 0;
-  background: #1A1A1A;
-  border: 1px solid rgba(245, 166, 35, 0.2);
+  margin: 2rem 0;
+  background: #141414;
+  border: 1px solid rgba(245, 166, 35, 0.25);
   border-radius: 8px;
   overflow: hidden;
 }
-article table th {
-  background: rgba(245, 166, 35, 0.1);
+.article-content thead {
+  background: rgba(245, 166, 35, 0.12);
+}
+.article-content th {
   color: #F5A623;
   font-weight: 700;
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  padding: 12px 16px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  padding: 14px 18px;
   text-align: left;
-  border-bottom: 1px solid rgba(245, 166, 35, 0.2);
+  border-bottom: 2px solid rgba(245, 166, 35, 0.3);
 }
-article table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.article-content td {
+  padding: 14px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   color: #d1d5db;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
-article table tr:last-child td {
+.article-content tr:last-child td {
   border-bottom: none;
 }
-article table tr:hover td {
-  background: rgba(245, 166, 35, 0.03);
-}
-
-/* Article content styling */
-article h2 {
-  border-left: 3px solid #F5A623;
-  padding-left: 12px;
-}
-article blockquote {
-  border-left: 3px solid #F5A623;
-  background: rgba(245, 166, 35, 0.05);
-  padding: 16px 20px;
-  border-radius: 0 8px 8px 0;
-  margin: 1.5rem 0;
-}
-article ul, article ol {
-  padding-left: 1.5rem;
-}
-article li {
-  margin-bottom: 0.5rem;
+.article-content tr:hover td {
+  background: rgba(245, 166, 35, 0.04);
 }
 
 /* Selection color */
