@@ -35,7 +35,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="relative group flex items-center">
             <Image
-              src="/logo-superspeed.jpg"
+              src="/logo-superspeed.png"
               alt="SuperSpeed Racing Team"
               width={220}
               height={60}

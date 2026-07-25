@@ -33,7 +33,7 @@ export default function Footer() {
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-6">
             <Image
-              src="/logo-superspeed.jpg"
+              src="/logo-superspeed.png"
               alt="SuperSpeed Racing Team"
               width={200}
               height={55}
