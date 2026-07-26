@@ -348,17 +348,17 @@ export default function Home() {
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
               <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Featured Product</span>
               <h2 className="font-orbitron text-4xl md:text-5xl font-black leading-tight">
-                NEXUS PRO<br /><span className="text-gradient-orange">CARBON HELMET</span>
+                SHARK<br /><span className="text-gradient-orange">AERON GP</span>
               </h2>
               <p className="text-gray-400 leading-relaxed">
-                Engineered for the ultimate in protection and aerodynamics. Full carbon fiber shell, advanced ventilation system, and FIA 8859-2015 certified. The choice of champions.
+                Race-proven MotoGP replica helmet. Ultra-lightweight carbon shell with advanced aerodynamics, superior ventilation, and GP-level safety standards. The choice of champions on the world's fastest circuits.
               </p>
               <ul className="space-y-3">
                 {[
-                  "Full carbon fiber construction — 1,250g ultralight",
-                  "Advanced anti-fog visor with tear-off system",
-                  "FIA 8859-2015 & Snell SA2020 certified",
-                  "Integrated hydration & communication system",
+                  "Carbon fiber shell — 1,280g GP-grade lightweight",
+                  "Optical Class 1 visor with Pinlock Max Vision™",
+                  "FIM homologated & ECE 22.06 certified",
+                  "Shark Aerodynamics System — optimized for 350+ km/h",
                 ].map((feature, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
                     <span className="text-[#F5A623] mt-0.5">▸</span>
@@ -367,7 +367,7 @@ export default function Home() {
                 ))}
               </ul>
               <Link href="/speed-shop" className="inline-block btn-racing px-8 py-4 rounded text-sm uppercase tracking-wider">
-                Shop Now — Rp 28.000.000
+                Shop Now — Rp 12.500.000
               </Link>
             </motion.div>
           </div>
