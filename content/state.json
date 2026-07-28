@@ -1,15 +1,16 @@
 {
-  "total_articles": 2,
-  "last_run": "2026-07-28",
+  "total_articles": 3,
+  "last_run": "2026-07-29",
   "category_count": {
     "Motor Matic": 1,
     "Superbike & Sport": 1,
     "Motocross & Adventure": 0,
-    "Review Part Racing": 0
+    "Review Part Racing": 1
   },
   "used_titles": [
     "3056b2943098",
-    "262cdb7fef27"
+    "262cdb7fef27",
+    "b89113bb9a04"
   ],
-  "last_category": "Superbike & Sport"
+  "last_category": "Review Part Racing"
 }
