@@ -6,10 +6,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navItems = [
-  { name: "Home", href: "/" },
-  { name: "Speed Shop", href: "/speed-shop" },
-  { name: "Racing Team", href: "/racing-team" },
-  { name: "Blog", href: "/blog" },
+  { name: "Beranda", href: "/" },
+  { name: "Katalog Part", href: "/speed-shop" },
+  { name: "Tim Balap", href: "/racing-team" },
+  { name: "Artikel", href: "/blog" },
 ];
 
 export default function Navbar() {
@@ -36,7 +36,7 @@ export default function Navbar() {
           <Link href="/" className="relative group flex items-center">
             <Image
               src="/logo-superspeed.png"
-              alt="SuperSpeed Racing Team"
+              alt="SuperSpeed.id"
               width={400}
               height={100}
               className="h-20 md:h-24 w-auto object-contain"
@@ -61,7 +61,7 @@ export default function Navbar() {
               href="#contact"
               className="ml-4 px-7 py-2.5 text-sm font-bold uppercase tracking-wider bg-gradient-to-r from-[#F5A623] to-[#D4891A] text-black rounded hover:shadow-lg hover:shadow-[#F5A623]/30 hover:-translate-y-0.5 transition-all duration-300"
             >
-              Contact
+              Hubungi Kami
             </Link>
           </nav>
 
@@ -115,7 +115,7 @@ export default function Navbar() {
                   onClick={() => setMobileOpen(false)}
                   className="block text-center py-3 bg-gradient-to-r from-[#F5A623] to-[#D4891A] text-black font-bold uppercase tracking-wider rounded"
                 >
-                  Contact Us
+                  Hubungi Kami
                 </Link>
               </motion.div>
             </nav>
