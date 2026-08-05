@@ -2,9 +2,44 @@
 
 ## Overview
 - **Target**: 1 artikel/hari = 365/tahun = 7,300 artikel dalam 20 tahun
-- **Bahasa**: Bahasa Indonesia (SEO lokal)
-- **Model**: GPT-4o-mini (draft) → GPT-4o (polish) — 2-stage pipeline
-- **Cost estimate**: ~Rp 15-25K/bulan (sangat murah)
+- **Bahasa**: Bahasa Indonesia baku, mengikuti `content/VOICE.md`
+- **Model**: `claude-opus-5`, satu tahap, dengan satu kali penulisan ulang bila
+  draf melanggar daftar larangan gaya
+- **Perkiraan biaya**: Rp 75.000 sampai Rp 90.000 per bulan untuk 30 artikel
+
+Angka biaya lama di dokumen ini (Rp 15.000 sampai Rp 25.000) tidak pernah
+realistis untuk artikel sepanjang 2.500 kata dan sudah dikoreksi. Jika biaya
+perlu ditekan, ganti `CLAUDE_MODEL` di `scripts/autopilot.py` menjadi
+`claude-sonnet-5`; biayanya turun sekitar setengah dengan penurunan mutu
+tulisan yang masih wajar.
+
+## Aturan Penulisan
+
+Panduan gaya lengkap ada di `content/VOICE.md` dan berlaku mengikat untuk
+artikel maupun halaman statis. Ringkasnya: tanpa tanda pisah panjang, tanpa
+pola tiga serangkai, tanpa superlatif tanpa bukti, dan tanpa statistik yang
+dikaitkan dengan nama lembaga kecuali sumbernya benar-benar diketahui.
+
+Seluruh angka yang menyangkut SuperSpeed.id harus merujuk ke `content/FACTS.md`.
+
+## Keragaman Struktur
+
+Ini pembeda utama versi 3.0 dari versi sebelumnya. Dulu setiap artikel memakai
+kerangka yang sama persis, sehingga seluruh arsip punya bentuk identik. Sekarang
+`scripts/autopilot.py` mengacak enam hal pada setiap artikel:
+
+| Yang diacak | Rentang |
+|---|---|
+| Kerangka artikel | 6 pilihan, dua kerangka terakhir dihindari |
+| Jumlah H2 | 3 sampai 7, tergantung kerangka |
+| Jumlah FAQ | 0, 3, 4, atau 5. Sebagian artikel memang tanpa FAQ |
+| Panjang | 1.100 sampai 2.400 kata |
+| Tabel | Wajib, opsional, atau dilarang, tergantung kerangka |
+| H3 dan daftar berbutir | Ada atau tidak ada |
+
+Enam kerangka yang tersedia: ulasan berbasis pemakaian, panduan langkah,
+komparasi dua produk, catatan lintasan, menjawab pertanyaan pembeli, dan
+tinjauan tren.
 
 ## Content Categories (4 Pilar)
 
@@ -89,11 +124,21 @@ Every article includes:
 - Core Web Vitals optimized (Next.js SSG)
 
 ## Anti-Duplicate System
-- Jaccard similarity check (60% threshold)
-- Topic tracking in state.json
+- Topic tracking in state.json (hash judul, 10.000 terakhir)
 - Category rotation enforcement
-- Title deduplication
+- Rotasi kerangka artikel, dua kerangka terakhir dihindari
+- Rotasi penulis dan gambar utama per kategori
 - 500+ unique topic templates per category
+
+## Pemeriksaan Sebelum Simpan
+
+`validate_draft()` di `scripts/autopilot.py` memeriksa setiap draf terhadap tiga
+hal: tanda pisah panjang, frasa klise yang terdaftar, dan pola statistik
+berlabel lembaga. Bila ada pelanggaran, artikel ditulis ulang sekali dari awal.
+Bila masih melanggar, tanda pisah panjang dibersihkan secara mekanis dan
+sisanya dicatat di `content/autopilot.log`.
+
+Waktu baca dihitung dari jumlah kata sebenarnya, bukan dari klaim model.
 
 ## 20-Year Sustainability Plan
 

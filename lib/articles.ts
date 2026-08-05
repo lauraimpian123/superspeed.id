@@ -19,6 +19,10 @@ export interface Article {
   metaDescription: string;
   faq: { question: string; answer: string }[];
   relatedSlugs: string[];
+  // Ditambahkan oleh autopilot v3.0. Opsional supaya artikel lama tetap terbaca.
+  authorRole?: string;
+  wordCount?: number;
+  blueprint?: string;
 }
 
 const ARTICLES_DIR = path.join(process.cwd(), "content", "articles");

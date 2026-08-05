@@ -1,14 +1,24 @@
 #!/usr/bin/env python3
 """
-SuperSpeed.id Blog Autopilot v2.0
-Generates 1 SEO-optimized, human-quality article per day.
+SuperSpeed.id Blog Autopilot v3.0
+Menulis satu artikel per hari untuk content/articles/.
 
-Categories: Motor Matic (30%), Superbike & Sport (25%), Motocross & Adventure (20%), Review Part Racing (25%)
-Pipeline: Claude Sonnet 4.5 (draft — human-like) → Claude Sonnet 4.5 (SEO polish)
-Output: JSON article files in content/articles/
+Perubahan utama dari v2.0 ada pada keragaman. Versi sebelumnya memakai satu
+kerangka artikel yang sama untuk setiap topik, sehingga seluruh arsip punya
+bentuk identik: lead, empat sampai enam H2, satu tabel, lalu tepat lima FAQ.
+Keseragaman antar dokumen itu jauh lebih mudah dikenali sebagai tulisan mesin
+daripada gaya kalimat per paragraf.
+
+Versi ini mengacak kerangka, jumlah subjudul, jumlah FAQ, panjang artikel,
+gaya pembuka, dan penulis. Keluaran model juga diperiksa ulang terhadap daftar
+larangan di content/VOICE.md sebelum disimpan.
+
+Kategori: Motor Matic (30%), Superbike & Sport (25%),
+          Motocross & Adventure (20%), Review Part Racing (25%)
 """
 
 import os
+import re
 import sys
 import json
 import time
@@ -37,10 +47,27 @@ if not ANTHROPIC_KEY:
                 if line.startswith("ANTHROPIC_API_KEY="):
                     ANTHROPIC_KEY = line.strip().split("=", 1)[1]
 
-CLAUDE_MODEL = "claude-sonnet-4-5-20250929"
+CLAUDE_MODEL = "claude-opus-5"
 
-AUTHOR = "SuperSpeed Racing Team"
 SITE_URL = "https://superspeed.id"
+
+# Penulis bergilir. Nama diambil dari content/FACTS.md; jangan menambah nama di
+# sini tanpa menambahkannya lebih dulu ke dokumen itu.
+AUTHORS = [
+    ("Agus Setiawan", "Head Mechanic"),
+    ("Sari Dewi", "Data Analyst"),
+    ("Hideki Tanaka", "Chief Engineer"),
+    ("Redaksi SuperSpeed.id", "Redaksi"),
+]
+
+# Gambar utama per kategori. Satu gambar untuk semua artikel adalah penanda
+# arsip yang dihasilkan otomatis.
+CATEGORY_IMAGES = {
+    "Motor Matic": ["/images/blog-motorsport.png", "/images/speed-shop-banner.png"],
+    "Superbike & Sport": ["/images/motogp-action.png", "/images/motogp-straight.png"],
+    "Motocross & Adventure": ["/images/mandalika-race.png", "/images/racing-team.png"],
+    "Review Part Racing": ["/images/helmet-product.png", "/images/car-closeup.png"],
+}
 
 # Category weights (must sum to 100)
 CATEGORIES = {
@@ -178,6 +205,138 @@ BRANDS_PART = ["Brembo", "Akrapovič", "Öhlins", "Yoshimura", "Arai", "Shoei", 
 LOKASI = ["Jawa", "Bali", "Lombok", "Sumatera", "Kalimantan", "Sulawesi", "Indonesia"]
 
 # ═══════════════════════════════════════════════════════════════
+# Keragaman Struktur
+#
+# Enam kerangka di bawah dipilih acak setiap kali artikel dibuat. Masing-masing
+# punya alur, panjang, dan kebiasaan format yang berbeda, supaya arsip tidak
+# terbaca sebagai satu cetakan yang diulang.
+# ═══════════════════════════════════════════════════════════════
+
+ARTICLE_BLUEPRINTS = [
+    {
+        "id": "ulasan-pemakaian",
+        "alur": (
+            "Ulasan berdasarkan pemakaian nyata. Mulai dari kondisi pengujian "
+            "(berapa lama dipakai, di jalan seperti apa, oleh siapa), lalu temuan "
+            "yang menonjol, lalu keluhan yang muncul, lalu kesimpulan siapa yang "
+            "cocok memakainya. Sebutkan minimal satu kekurangan yang konkret."
+        ),
+        "h2_range": (3, 5),
+        "faq_choices": [0, 3, 4],
+        "word_range": (1300, 2000),
+        "table": "opsional",
+    },
+    {
+        "id": "panduan-langkah",
+        "alur": (
+            "Panduan pengerjaan. Sebutkan alat dan bahan, perkiraan waktu, dan "
+            "tingkat kesulitan di bagian awal. Lalu langkah pengerjaan berurutan. "
+            "Tutup dengan kesalahan yang paling sering terjadi dan cara "
+            "memperbaikinya. Nyatakan dengan jelas bagian mana yang sebaiknya "
+            "diserahkan ke bengkel."
+        ),
+        "h2_range": (4, 6),
+        "faq_choices": [3, 4, 5],
+        "word_range": (1500, 2400),
+        "table": "tidak",
+    },
+    {
+        "id": "komparasi-dua",
+        "alur": (
+            "Perbandingan dua produk atau dua pilihan. Tetapkan kriteria "
+            "perbandingan di awal dan jelaskan mengapa kriteria itu yang dipakai. "
+            "Bandingkan per kriteria. Tutup dengan rekomendasi bersyarat: siapa "
+            "sebaiknya memilih yang mana, dan dalam kondisi apa keduanya sama saja."
+        ),
+        "h2_range": (3, 5),
+        "faq_choices": [0, 3, 4],
+        "word_range": (1200, 1900),
+        "table": "wajib",
+    },
+    {
+        "id": "catatan-lintasan",
+        "alur": (
+            "Catatan dari sesi di lintasan atau di gerai, ditulis kronologis. "
+            "Apa yang dicoba, apa yang rusak atau gagal, apa yang diubah, hasil "
+            "akhirnya bagaimana. Nada laporan, bukan promosi. Boleh diakhiri "
+            "tanpa kesimpulan yang rapi kalau memang belum ada kesimpulannya."
+        ),
+        "h2_range": (3, 4),
+        "faq_choices": [0, 0, 3],
+        "word_range": (1100, 1700),
+        "table": "tidak",
+    },
+    {
+        "id": "tanya-pembeli",
+        "alur": (
+            "Menjawab pertanyaan yang sering masuk ke gerai. Buka dengan "
+            "pertanyaannya apa adanya, lalu jawab bertahap dari yang paling "
+            "mendasar. Akui bila sebagian jawabannya bergantung pada kondisi "
+            "masing-masing motor dan tidak bisa diseragamkan."
+        ),
+        "h2_range": (4, 7),
+        "faq_choices": [0, 0, 4],
+        "word_range": (1400, 2200),
+        "table": "opsional",
+    },
+    {
+        "id": "tinjauan-tren",
+        "alur": (
+            "Tinjauan perkembangan di satu bidang. Bedakan dengan tegas antara "
+            "yang sudah terlihat di pasar Indonesia dan yang masih dugaan. "
+            "Tanpa satu pun angka pertumbuhan pasar atau kutipan lembaga riset. "
+            "Tutup dengan menyebut apa yang belum bisa dipastikan."
+        ),
+        "h2_range": (3, 5),
+        "faq_choices": [0, 3],
+        "word_range": (1200, 1800),
+        "table": "tidak",
+    },
+]
+
+OPENING_STYLES = [
+    "Langsung ke informasi utama pada kalimat pertama, gaya piramida terbalik.",
+    "Mulai dari satu situasi konkret di gerai atau di lintasan, lalu masuk ke topik pada paragraf kedua.",
+    "Mulai dari pertanyaan yang benar-benar sering ditanyakan pembeli, lalu jawab.",
+    "Mulai dari satu angka atau spesifikasi yang mengejutkan, lalu jelaskan artinya.",
+    "Mulai dari kesalahpahaman yang umum, lalu luruskan.",
+]
+
+CLOSING_STYLES = [
+    "Tutup dengan rekomendasi yang jelas dan bersyarat.",
+    "Tutup dengan satu hal yang masih belum pasti dan perlu diuji lebih lanjut.",
+    "Tutup dengan ringkasan singkat, maksimal tiga kalimat, tanpa mengulang isi.",
+    "Tutup dengan langkah praktis yang bisa langsung dikerjakan pembaca.",
+]
+
+# Frasa yang menandai tulisan mesin. Kemunculannya memicu satu kali penulisan
+# ulang; lihat validate_draft().
+BANNED_PHRASES = [
+    "perlu dicatat",
+    "yang tak kalah penting",
+    "menariknya",
+    "di era digital",
+    "di era modern",
+    "mari kita bahas",
+    "dalam dunia yang serba cepat",
+    "bukan sekadar",
+    "lebih dari sekadar",
+    "membawa ke level",
+    "solusi menyeluruh",
+    "pengalaman tak terlupakan",
+    "tak dapat dipungkiri",
+    "seiring berjalannya waktu",
+    "kesimpulannya, ",
+    "secara keseluruhan, ",
+]
+
+# Pola yang menandai statistik karangan berlabel lembaga.
+FABRICATED_STAT_PATTERN = (
+    r"(?:data|riset|studi|laporan|survei)\s+(?:dari\s+)?"
+    r"[A-Z][A-Za-z\s]{3,40}\s+(?:menunjukkan|mencatat|menyebut)"
+)
+
+# ═══════════════════════════════════════════════════════════════
 # Helper Functions
 # ═══════════════════════════════════════════════════════════════
 
@@ -297,16 +456,27 @@ def slugify(text):
     text = text.strip('-')
     return text[:80]
 
-def call_claude(system_prompt, user_prompt, max_tokens=8000):
-    """Call Anthropic Claude API — produces natural, human-like writing."""
+def call_claude(system_prompt, user_prompt, max_tokens=24000):
+    """Panggil Messages API dan kembalikan teks jawaban.
+
+    Permintaan dikirim sebagai stream. Artikel panjang membutuhkan max_tokens
+    besar, dan permintaan non-stream dengan max_tokens di atas sekitar 16.000
+    berisiko kena batas waktu HTTP.
+
+    Catatan dua hal yang berubah pada model sekarang:
+    - Parameter temperature sudah tidak diterima dan menghasilkan galat 400.
+      Keragaman gaya diatur lewat prompt, bukan lewat sampling.
+    - Proses berpikir aktif secara bawaan dan ikut memakai jatah max_tokens,
+      jadi jatahnya perlu jauh lebih longgar daripada panjang artikel saja.
+    """
     body = json.dumps({
         "model": CLAUDE_MODEL,
         "max_tokens": max_tokens,
-        "temperature": 0.9,
+        "stream": True,
         "system": system_prompt,
         "messages": [{"role": "user", "content": user_prompt}],
     }).encode()
-    
+
     req = urllib.request.Request(
         "https://api.anthropic.com/v1/messages",
         data=body,
@@ -316,126 +486,308 @@ def call_claude(system_prompt, user_prompt, max_tokens=8000):
             "Content-Type": "application/json",
         },
     )
-    
-    resp = urllib.request.urlopen(req, timeout=180)
-    data = json.loads(resp.read())
-    return data["content"][0]["text"]
+
+    last_error = None
+    for attempt in range(4):
+        try:
+            parts = []
+            with urllib.request.urlopen(req, timeout=900) as resp:
+                for raw in resp:
+                    line = raw.decode("utf-8").strip()
+                    if not line.startswith("data:"):
+                        continue
+                    payload = line[5:].strip()
+                    if not payload:
+                        continue
+                    event = json.loads(payload)
+                    etype = event.get("type")
+                    if etype == "content_block_delta":
+                        delta = event.get("delta", {})
+                        if delta.get("type") == "text_delta":
+                            parts.append(delta.get("text", ""))
+                    elif etype == "error":
+                        raise RuntimeError(event.get("error", {}).get("message", "stream error"))
+            text = "".join(parts)
+            if not text.strip():
+                raise RuntimeError("jawaban kosong")
+            return text
+        except urllib.error.HTTPError as e:
+            last_error = e
+            # 429 dan 5xx layak dicoba ulang; sisanya tidak akan berubah hasilnya.
+            if e.code != 429 and e.code < 500:
+                detail = e.read().decode("utf-8", "replace")[:500]
+                raise RuntimeError(f"HTTP {e.code}: {detail}") from e
+            wait = 2 ** attempt * 5
+            log(f"  HTTP {e.code}, mencoba lagi dalam {wait} detik")
+            time.sleep(wait)
+        except (urllib.error.URLError, RuntimeError, json.JSONDecodeError) as e:
+            last_error = e
+            wait = 2 ** attempt * 5
+            log(f"  Gagal ({e}), mencoba lagi dalam {wait} detik")
+            time.sleep(wait)
+
+    raise RuntimeError(f"Gagal setelah 4 percobaan: {last_error}")
 
 # ═══════════════════════════════════════════════════════════════
 # Article Generation
 # ═══════════════════════════════════════════════════════════════
 
-def generate_article(topic, category, content_type):
-    """Single-stage Claude Sonnet 4.5 — human-quality writing + SEO."""
-    
-    today = datetime.date.today().isoformat()
-    
-    log(f"  Generating with Claude Sonnet 4.5...")
+SYSTEM_PROMPT = """Kamu penulis di redaksi SuperSpeed.id, sebuah toko part racing di Lombok yang juga menjalankan tim balap sendiri. Kamu menulis untuk pembaca yang sudah paham dasar otomotif, bukan untuk pemula total.
 
-    system_prompt = """Kamu adalah jurnalis otomotif senior di media online Indonesia. Gaya penulisanmu mengikuti standar detik.com Oto — profesional, informatif, rapi, dan mudah dibaca.
+BAHASA
+- Bahasa Indonesia baku. Sapa pembaca dengan "Anda".
+- Istilah teknis yang memang tidak punya padanan lazim boleh tetap Inggris: caliper, quickshifter, fitment, indent, track day.
+- Jangan pakai bahasa gaul, emoji, atau simbol dekoratif.
 
-GAYA PENULISAN DETIK.COM (WAJIB DIIKUTI):
-- Bahasa Indonesia baku dan formal, gunakan "Anda" bukan "gue/lo/kamu"
-- Kalimat lugas, langsung ke inti, tidak bertele-tele
-- Setiap paragraf berisi 2-3 kalimat saja (scannable)
-- Paragraf pertama langsung menyajikan informasi utama (piramida terbalik)
-- Setiap section H2 dimulai dengan kalimat pembuka yang kuat
-- Gunakan kutipan atau data untuk memperkuat argumen
-- Nada netral dan objektif, tetap informatif
-- JANGAN gunakan bahasa gaul, slang, atau bahasa tidak baku
-- JANGAN gunakan emoji, simbol dekoratif, atau bullet dengan simbol
-- JANGAN gunakan frasa AI klise: "perlu dicatat", "yang tak kalah penting", "menariknya"
-- Hindari pengulangan kata dalam satu paragraf
+LARANGAN KERAS
+1. Dilarang memakai tanda pisah panjang (—) di mana pun. Pakai titik, koma, titik dua, atau tanda kurung.
+2. Dilarang menulis tiga kata benda atau tiga frasa berderet. Pakai dua, atau empat, atau susun ulang jadi kalimat. Pola tiga serangkai adalah penanda tulisan mesin yang paling mudah dikenali.
+3. Dilarang memakai frasa berikut: "perlu dicatat", "yang tak kalah penting", "menariknya", "di era digital ini", "mari kita bahas", "bukan sekadar", "lebih dari sekadar", "membawa ke level berikutnya", "solusi menyeluruh", "pengalaman tak terlupakan", "tak dapat dipungkiri", "seiring berjalannya waktu".
+4. Dilarang mengarang statistik yang dikaitkan dengan lembaga. Jangan pernah menulis kalimat seperti "data dari [nama lembaga] menunjukkan pasar tumbuh 18,7 persen". Kalau kamu tidak tahu angkanya, tulis secara kualitatif tanpa angka. Ini lebih penting daripada terdengar meyakinkan.
+5. Dilarang memakai superlatif tanpa bukti: "terbaik", "nomor satu", "kelas dunia", "terlengkap", "revolusioner".
+6. Dilarang menutup artikel dengan kalimat generik seperti "Kesimpulannya," atau "Secara keseluruhan,".
 
-FORMAT HTML WAJIB:
-- Heading: <h2> dan <h3> (deskriptif, mengandung keyword)
-- Paragraf: <p> (2-3 kalimat per paragraf)
-- List: <ul><li> atau <ol><li> (gunakan untuk daftar spesifikasi, tips, dll)
-- Bold: <strong> untuk penekanan penting
-- Italic: <em> untuk istilah teknis atau nama produk
-- Tabel: <table><thead><tr><th></th></tr></thead><tbody><tr><td></td></tr></tbody></table>
-- Blockquote: <blockquote> untuk kutipan atau highlight
-- Internal link: <a href="/speed-shop">teks</a>, <a href="/racing-team">teks</a>, <a href="/blog">teks</a> — minimal 3 link
+YANG MEMBUAT TULISAN TERBACA SEPERTI DITULIS ORANG
+- Panjang kalimat harus tidak rata. Selipkan kalimat pendek di antara kalimat panjang. Tulisan mesin menghasilkan kalimat dengan panjang seragam; tulisan orang tidak.
+- Sebutkan keterbatasan secara spesifik. Ini pembeda paling kuat. Contoh: part tertentu harus indent tiga minggu, harga belum termasuk pemasangan, hasil pengujian belum konsisten, sebagian pertanyaan tidak bisa dijawab seragam.
+- Sebutkan detail kecil yang khas: suhu aspal Mandalika pada siang hari, cuaca Lombok saat musim hujan, ukuran baut, nama kurir, jam tutup gerai.
+- Boleh menyatakan ketidakpastian. "Kami belum menguji varian itu" lebih baik daripada menebak.
+- Satu gagasan per paragraf, dua sampai empat kalimat.
+- Pakai kata kerja aktif.
 
-TABEL WAJIB PAKAI STRUKTUR LENGKAP:
-<table>
-<thead><tr><th>Kolom 1</th><th>Kolom 2</th></tr></thead>
-<tbody><tr><td>Data</td><td>Data</td></tr></tbody>
-</table>
+FORMAT HTML
+- Heading <h2>, dan <h3> hanya bila memang perlu.
+- Paragraf <p>.
+- Daftar <ul><li> atau <ol><li> bila isinya memang berupa daftar.
+- <strong> untuk penekanan seperlunya, <em> untuk istilah asing.
+- Tautan internal ke <a href="/speed-shop">, <a href="/racing-team">, atau <a href="/blog">. Dua sampai tiga saja, dan hanya bila memang relevan dengan kalimatnya. Jangan memaksakan tautan.
+- Tabel hanya bila diminta, dengan struktur lengkap:
+  <table><thead><tr><th>Kolom</th></tr></thead><tbody><tr><td>Isi</td></tr></tbody></table>
 
-DATA:
-- Sertakan harga dalam Rupiah (Rp X.XXX.XXX)
-- Sertakan angka spesifik: CC, HP, Nm, kg, km/liter
-- Gunakan data yang akurat dan terbaru
+ANGKA
+- Harga dalam format Rp X.XXX.XXX.
+- Spesifikasi teknis boleh disebut bila kamu yakin: cc, HP, Nm, kg, km per liter.
+- Kalau ragu terhadap sebuah angka, jangan sebut angkanya.
 
-Output HANYA JSON valid (tanpa markdown code block):
+Keluarkan HANYA JSON valid, tanpa blok kode markdown:
 {
-  "title": "Judul informatif (max 60 char)",
-  "excerpt": "Deskripsi ringkas 155-160 char untuk meta description",
-  "content": "Full HTML artikel 2500-3500 kata",
-  "tags": ["5 tags relevan"],
-  "faq": [{"question": "Pertanyaan?", "answer": "Jawaban lengkap 2-3 kalimat."}] (5 FAQ),
-  "readTime": "X menit",
-  "metaTitle": "SEO Title ≤60 char | SuperSpeed.id",
-  "metaDescription": "Meta description SEO 155-160 char"
+  "title": "Judul informatif, maksimal 60 karakter",
+  "excerpt": "Ringkasan 155 sampai 160 karakter",
+  "content": "Artikel lengkap dalam HTML",
+  "tags": ["4 sampai 6 tag relevan"],
+  "faq": [{"question": "Pertanyaan?", "answer": "Jawaban 2 sampai 3 kalimat."}],
+  "metaTitle": "Judul SEO maksimal 60 karakter | SuperSpeed.id",
+  "metaDescription": "Meta description 155 sampai 160 karakter"
 }"""
 
-    user_prompt = f"""Tulis artikel dengan standar jurnalistik detik.com:
 
-Topik: "{topic}"
-Kategori: {category}
-Tipe: {content_type}
+def build_article_spec(recent_blueprints=()):
+    """Tentukan bentuk artikel secara acak.
 
-STRUKTUR ARTIKEL:
-1. Lead paragraph — informasi utama langsung di paragraf pertama
-2. 4-6 section H2 yang informatif dan terstruktur
-3. Sub-section H3 untuk detail tambahan
-4. Tabel spesifikasi lengkap dengan thead dan tbody (jika review/komparasi)
-5. Kesimpulan dengan rekomendasi yang jelas
-6. 5 FAQ dengan jawaban lengkap
+    Ini bagian terpenting dari keseluruhan skrip. Detektor teks otomatis jauh
+    lebih mudah mengenali keseragaman antar dokumen daripada gaya kalimat.
+    Delapan artikel dengan kerangka identik lebih mencurigakan daripada satu
+    artikel dengan diksi yang agak kaku.
 
-Tulis seperti jurnalis profesional. Rapi, bersih, informatif, dan mudah dibaca."""
+    recent_blueprints berisi kerangka yang baru saja dipakai. Kerangka itu
+    dihindari supaya dua artikel berurutan tidak berbentuk sama.
+    """
+    pool = [b for b in ARTICLE_BLUEPRINTS if b["id"] not in recent_blueprints]
+    bp = random.choice(pool or ARTICLE_BLUEPRINTS)
+    return {
+        "blueprint": bp,
+        "h2_count": random.randint(*bp["h2_range"]),
+        "faq_count": random.choice(bp["faq_choices"]),
+        "word_target": random.randint(*bp["word_range"]),
+        "opening": random.choice(OPENING_STYLES),
+        "closing": random.choice(CLOSING_STYLES),
+        "use_table": (
+            bp["table"] == "wajib"
+            or (bp["table"] == "opsional" and random.random() < 0.35)
+        ),
+        "use_h3": random.random() < 0.5,
+        "use_list": random.random() < 0.6,
+    }
 
-    raw = call_claude(system_prompt, user_prompt, max_tokens=8000)
-    
-    # Parse JSON
+
+def validate_draft(data):
+    """Kembalikan daftar pelanggaran terhadap content/VOICE.md."""
+    blob = " ".join([
+        str(data.get("title", "")),
+        str(data.get("excerpt", "")),
+        str(data.get("content", "")),
+        " ".join(f"{f.get('question','')} {f.get('answer','')}" for f in data.get("faq") or []),
+    ])
+    lower = blob.lower()
+
+    problems = []
+    if "—" in blob or "–" in blob:
+        problems.append("memakai tanda pisah panjang")
+    for phrase in BANNED_PHRASES:
+        if phrase in lower:
+            problems.append(f"frasa terlarang: {phrase.strip()}")
+    if re.search(FABRICATED_STAT_PATTERN, blob):
+        problems.append("statistik berlabel lembaga yang tidak bisa diverifikasi")
+    return problems
+
+
+def sanitize(data):
+    """Jaring pengaman terakhir bila model tetap melanggar setelah ditulis ulang.
+
+    Hanya menangani tanda pisah panjang, karena itu satu-satunya pelanggaran
+    yang bisa diperbaiki secara mekanis tanpa merusak makna kalimat.
+    """
+    def fix(text):
+        if not isinstance(text, str):
+            return text
+        text = re.sub(r"\s*[—–]\s*", ", ", text)
+        return re.sub(r",\s*,", ",", text)
+
+    for key in ("title", "excerpt", "content", "metaTitle", "metaDescription"):
+        data[key] = fix(data.get(key, ""))
+    for item in data.get("faq") or []:
+        item["question"] = fix(item.get("question", ""))
+        item["answer"] = fix(item.get("answer", ""))
+    return data
+
+
+def count_words(html):
+    return len(re.sub(r"<[^>]+>", " ", html or "").split())
+
+
+def parse_json_reply(raw):
+    raw = raw.strip()
+    if raw.startswith("```"):
+        raw = raw.split("\n", 1)[1].rsplit("```", 1)[0]
     try:
-        raw = raw.strip()
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1].rsplit("```", 1)[0]
-        data = json.loads(raw)
-    except json.JSONDecodeError as e:
-        log(f"  JSON parse attempt 2...")
-        import re
-        match = re.search(r'\{[\s\S]*\}', raw)
-        if match:
-            data = json.loads(match.group())
-        else:
+        return json.loads(raw)
+    except json.JSONDecodeError:
+        match = re.search(r"\{[\s\S]*\}", raw)
+        if not match:
             raise
+        return json.loads(match.group())
 
-    slug = slugify(data.get("title", topic))
+
+def build_user_prompt(topic, category, content_type, spec, extra_note=""):
+    bp = spec["blueprint"]
+
+    lines = [
+        f'Tulis satu artikel dengan topik: "{topic}"',
+        "",
+        f"Kategori: {category}",
+        f"Tipe tulisan: {content_type}",
+        "",
+        "BENTUK ARTIKEL YANG DIMINTA KALI INI",
+        f"Alur: {bp['alur']}",
+        f"Pembuka: {spec['opening']}",
+        f"Penutup: {spec['closing']}",
+        f"Jumlah subjudul H2: tepat {spec['h2_count']}.",
+        f"Panjang: sekitar {spec['word_target']} kata. Tidak perlu tepat, tapi jangan jauh melebihi.",
+    ]
+
+    lines.append(
+        "Sertakan satu tabel perbandingan dengan struktur thead dan tbody yang lengkap."
+        if spec["use_table"]
+        else "Jangan pakai tabel sama sekali pada artikel ini."
+    )
+    lines.append(
+        "Boleh memakai H3 di bawah sebagian H2 bila memang membantu."
+        if spec["use_h3"]
+        else "Jangan pakai H3. Cukup H2 dan paragraf."
+    )
+    lines.append(
+        "Sertakan satu daftar berbutir bila isinya memang berupa daftar."
+        if spec["use_list"]
+        else "Jangan pakai daftar berbutir. Tulis dalam bentuk paragraf."
+    )
+
+    if spec["faq_count"] == 0:
+        lines.append('Tidak perlu bagian FAQ. Kembalikan "faq": [].')
+    else:
+        lines.append(
+            f"Sertakan tepat {spec['faq_count']} pertanyaan pada bagian faq. "
+            "Ambil pertanyaan yang memang wajar ditanyakan pembeli, bukan pertanyaan "
+            "yang dibuat-buat supaya ada isinya."
+        )
+
+    lines += [
+        "",
+        "PENGINGAT",
+        "Tidak ada tanda pisah panjang. Tidak ada pola tiga serangkai. Tidak ada "
+        "statistik karangan yang dikaitkan dengan lembaga. Sebutkan minimal satu "
+        "keterbatasan yang konkret dan merugikan kami sendiri.",
+    ]
+
+    if extra_note:
+        lines += ["", extra_note]
+
+    return "\n".join(lines)
+
+
+def generate_article(topic, category, content_type, recent_blueprints=()):
+    """Hasilkan satu artikel lengkap beserta metadatanya."""
+
+    today = datetime.date.today().isoformat()
+    spec = build_article_spec(recent_blueprints)
+
+    log(f"  Kerangka: {spec['blueprint']['id']}")
+    log(f"  H2: {spec['h2_count']} | FAQ: {spec['faq_count']} | "
+        f"target: {spec['word_target']} kata | tabel: {spec['use_table']}")
+
+    raw = call_claude(SYSTEM_PROMPT, build_user_prompt(topic, category, content_type, spec))
+    data = parse_json_reply(raw)
+
+    problems = validate_draft(data)
+    if problems:
+        log(f"  Pelanggaran gaya: {'; '.join(problems[:4])}")
+        log("  Menulis ulang satu kali...")
+        note = (
+            "Draf sebelumnya ditolak karena: "
+            + "; ".join(problems)
+            + ". Tulis ulang seluruh artikel tanpa pelanggaran tersebut. "
+            "Jangan sekadar menambal bagian yang bermasalah."
+        )
+        raw = call_claude(
+            SYSTEM_PROMPT,
+            build_user_prompt(topic, category, content_type, spec, extra_note=note),
+        )
+        data = parse_json_reply(raw)
+
+        remaining = validate_draft(data)
+        if remaining:
+            log(f"  Masih melanggar: {'; '.join(remaining[:4])}. Membersihkan seadanya.")
+            data = sanitize(data)
     
-    article = {
-        "slug": slug,
-        "title": data.get("title", topic),
+    title = data.get("title", topic)
+    words = count_words(data.get("content", ""))
+    author_name, author_role = random.choice(AUTHORS)
+    images = CATEGORY_IMAGES.get(category, ["/images/blog-motorsport.png"])
+
+    log(f"  Selesai: {words} kata, {len(data.get('faq') or [])} FAQ, penulis {author_name}")
+
+    return {
+        "slug": slugify(title),
+        "title": title,
         "excerpt": data.get("excerpt", ""),
         "content": data.get("content", ""),
         "category": category,
         "contentType": content_type,
+        "blueprint": spec["blueprint"]["id"],
         "tags": data.get("tags", []),
-        "author": AUTHOR,
+        "author": author_name,
+        "authorRole": author_role,
         "datePublished": today,
         "dateModified": today,
-        "readTime": data.get("readTime", "8 menit"),
+        # Dihitung dari jumlah kata sebenarnya, bukan dari klaim model.
+        "readTime": f"{max(1, round(words / 200))} menit",
+        "wordCount": words,
         "featured": False,
-        "featuredImage": "/images/blog-motorsport.png",
-        "metaTitle": data.get("metaTitle", f"{data.get('title', topic)} | SuperSpeed.id"),
+        "featuredImage": random.choice(images),
+        "metaTitle": data.get("metaTitle", f"{title} | SuperSpeed.id"),
         "metaDescription": data.get("metaDescription", data.get("excerpt", "")),
-        "faq": data.get("faq", []),
+        "faq": data.get("faq") or [],
         "relatedSlugs": [],
     }
-    
-    return article
 
 # ═══════════════════════════════════════════════════════════════
 # Main
@@ -443,7 +795,7 @@ Tulis seperti jurnalis profesional. Rapi, bersih, informatif, dan mudah dibaca."
 
 def main():
     log("=" * 60)
-    log("SuperSpeed.id Blog Autopilot v1.0")
+    log("SuperSpeed.id Blog Autopilot v3.0")
     log("=" * 60)
     
     if not ANTHROPIC_KEY:
@@ -474,8 +826,9 @@ def main():
     log(f"Topic: {topic}")
     
     # Generate article
+    recent_blueprints = state.get("recent_blueprints", [])
     try:
-        article = generate_article(topic, category, content_type)
+        article = generate_article(topic, category, content_type, recent_blueprints)
     except Exception as e:
         log(f"❌ Article generation failed: {e}")
         sys.exit(1)
@@ -498,6 +851,8 @@ def main():
     # Keep only last 10000 title hashes
     if len(state["used_titles"]) > 10000:
         state["used_titles"] = state["used_titles"][-10000:]
+    # Dua kerangka terakhir dihindari pada artikel berikutnya.
+    state["recent_blueprints"] = ([article["blueprint"]] + recent_blueprints)[:2]
     save_state(state)
     
     # Git commit and push
