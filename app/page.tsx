@@ -73,7 +73,7 @@ export default function Home() {
                 </motion.h1>
 
                 <motion.p variants={fadeUp} custom={2} className="text-lg md:text-xl text-gray-300 max-w-xl leading-relaxed">
-                  437 produk dari 12 brand resmi, mulai dari kampas rem harian sampai
+                  437 produk dalam tujuh kategori, mulai dari kampas rem harian sampai
                   suspensi spesifikasi balap. Pesan online dan kami kirim ke seluruh
                   Indonesia, atau datang langsung ke gerai kami di Mataram dan Jakarta Barat.
                 </motion.p>

@@ -53,7 +53,7 @@ export default function Footer() {
               className="h-18 md:h-20 w-auto object-contain"
             />
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-              Toko part racing dengan 437 produk dari 12 brand resmi. Kami menjual
+              Toko part racing dengan 437 produk dalam tujuh kategori. Kami menjual
               barang yang kami pakai sendiri di lintasan Mandalika sejak 2021.
             </p>
             <div className="space-y-4">

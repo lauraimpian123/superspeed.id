@@ -58,7 +58,7 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              href="#contact"
+              href="/#contact"
               className="ml-4 px-7 py-2.5 text-sm font-bold uppercase tracking-wider bg-gradient-to-r from-[#F5A623] to-[#D4891A] text-black rounded hover:shadow-lg hover:shadow-[#F5A623]/30 hover:-translate-y-0.5 transition-all duration-300"
             >
               Hubungi Kami
@@ -111,7 +111,7 @@ export default function Navbar() {
                 className="pt-4"
               >
                 <Link
-                  href="#contact"
+                  href="/#contact"
                   onClick={() => setMobileOpen(false)}
                   className="block text-center py-3 bg-gradient-to-r from-[#F5A623] to-[#D4891A] text-black font-bold uppercase tracking-wider rounded"
                 >

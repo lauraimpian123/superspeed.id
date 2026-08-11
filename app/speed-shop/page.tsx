@@ -6,25 +6,25 @@ import Image from "next/image";
 import Link from "next/link";
 
 const brands = [
-  { name: "Honda", country: "Japan", tagline: "The Power of Dreams" },
-  { name: "Yamaha", country: "Japan", tagline: "Revs Your Heart" },
-  { name: "Kawasaki", country: "Japan", tagline: "Let the Good Times Roll" },
-  { name: "Suzuki", country: "Japan", tagline: "Way of Life" },
-  { name: "Ducati", country: "Italy", tagline: "Racing DNA" },
-  { name: "BMW Motorrad", country: "Germany", tagline: "Make Life a Ride" },
+  { name: "Honda", country: "Jepang", tagline: "The Power of Dreams" },
+  { name: "Yamaha", country: "Jepang", tagline: "Revs Your Heart" },
+  { name: "Kawasaki", country: "Jepang", tagline: "Let the Good Times Roll" },
+  { name: "Suzuki", country: "Jepang", tagline: "Way of Life" },
+  { name: "Ducati", country: "Italia", tagline: "Racing DNA" },
+  { name: "BMW Motorrad", country: "Jerman", tagline: "Make Life a Ride" },
   { name: "KTM", country: "Austria", tagline: "Ready to Race" },
-  { name: "Aprilia", country: "Italy", tagline: "Be a Racer" },
-  { name: "Husqvarna", country: "Sweden", tagline: "Pioneering Since 1903" },
-  { name: "MV Agusta", country: "Italy", tagline: "Motorcycle Art" },
-  { name: "Triumph", country: "UK", tagline: "For the Ride" },
-  { name: "Brembo", country: "Italy", tagline: "Braking Excellence" },
+  { name: "Aprilia", country: "Italia", tagline: "Be a Racer" },
+  { name: "Husqvarna", country: "Swedia", tagline: "Pioneering Since 1903" },
+  { name: "MV Agusta", country: "Italia", tagline: "Motorcycle Art" },
+  { name: "Triumph", country: "Inggris", tagline: "For the Ride" },
+  { name: "Brembo", country: "Italia", tagline: "Braking Excellence" },
 ];
 
 const advantages = [
   {
     icon: "🏆",
-    title: "Kerja Sama Resmi dengan 12 Brand",
-    desc: "Barang kami datang langsung dari jalur distribusi resmi, lengkap dengan kartu garansi pabrikan. Kami tidak menjual barang tiruan, dan kami juga tidak menjual barang bekas balap.",
+    title: "Semua Barang Orisinal",
+    desc: "Dua belas merek kami ambil lewat jalur distribusi resmi, lengkap dengan kartu garansi pabrikan. Sisanya kami impor sendiri tanpa keagenan, dan untuk yang itu garansinya kami tanggung sendiri. Kami tidak menjual barang tiruan maupun bekas balap.",
   },
   {
     icon: "🔧",
@@ -72,7 +72,7 @@ const products = [
     category: "brake",
     price: 18500000,
     badge: "Paling Laris",
-    specs: "Radial Mount | 4-Piston | CNC Billet | MotoGP Tech",
+    specs: "Dudukan radial | 4 piston | CNC billet | teknologi MotoGP",
   },
   {
     id: 2,
@@ -81,7 +81,7 @@ const products = [
     category: "exhaust",
     price: 32000000,
     badge: "Spesifikasi Balap",
-    specs: "Titanium | Slip-On + Header | Euro5 | -4.2kg",
+    specs: "Titanium | slip-on dan header | Euro5 | lebih ringan 4,2 kg",
   },
   {
     id: 3,
@@ -89,7 +89,7 @@ const products = [
     brand: "Öhlins",
     category: "suspension",
     price: 28000000,
-    specs: "Through-Rod | 46mm Piston | Pressurized | Adjustable",
+    specs: "Through-rod | piston 46 mm | bertekanan | bisa disetel",
   },
   {
     id: 4,
@@ -98,7 +98,7 @@ const products = [
     category: "safety",
     price: 15800000,
     badge: "Baru Datang",
-    specs: "Snell M2020 | PB-SNC2 Shell | VAS-V ProShade",
+    specs: "Snell M2020 | batok PB-SNC2 | visor VAS-V ProShade",
   },
   {
     id: 5,
@@ -106,7 +106,7 @@ const products = [
     brand: "Woolich",
     category: "electronics",
     price: 12000000,
-    specs: "Full Map Edit | Quickshifter | Launch Control | Data Log",
+    specs: "Ubah map penuh | quickshifter | launch control | perekam data",
   },
   {
     id: 6,
@@ -115,7 +115,7 @@ const products = [
     category: "body",
     price: 45000000,
     badge: "Kelas Profesional",
-    specs: "Forged Magnesium | -2.8kg vs Stock | WSBK Spec",
+    specs: "Magnesium tempa | lebih ringan 2,8 kg dari standar | spek WSBK",
   },
   {
     id: 7,
@@ -123,7 +123,7 @@ const products = [
     brand: "Yoshimura",
     category: "exhaust",
     price: 22000000,
-    specs: "Stainless/Carbon | Works Finish | +8HP Gain",
+    specs: "Stainless dan karbon | finis works | tambahan 8 HP",
   },
   {
     id: 8,
@@ -131,7 +131,7 @@ const products = [
     brand: "JE Pistons",
     category: "engine",
     price: 8500000,
-    specs: "Forged | High Compression | Ceramic Coated | Race Spec",
+    specs: "Tempa | kompresi tinggi | lapis keramik | spek balap",
   },
   {
     id: 9,
@@ -140,7 +140,7 @@ const products = [
     category: "safety",
     price: 38000000,
     badge: "Teknologi MotoGP",
-    specs: "D-Air Airbag | Kangaroo Leather | CE Level 2 | Custom Fit",
+    specs: "Airbag D-Air | kulit kanguru | CE Level 2 | jahitan custom",
   },
 ];
 
@@ -164,7 +164,7 @@ export default function SpeedShop() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
               <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">
-                437 Produk dari 12 Brand Resmi
+                437 Produk dalam Tujuh Kategori
               </span>
               <h1 className="font-orbitron text-5xl md:text-7xl font-black">
                 KATALOG <span className="text-gradient-orange">PART</span>
@@ -218,13 +218,15 @@ export default function SpeedShop() {
       <section className="py-24 tech-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Daftar Lengkap</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Kerja Sama Resmi</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
               DUA BELAS <span className="text-gradient-orange">BRAND</span>
             </h2>
             <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
-              Ini seluruh brand yang punya kerja sama distribusi resmi dengan kami. Kalau
-              sebuah merek tidak ada dalam daftar ini, berarti kami memang belum menjualnya.
+              Dua belas merek berikut punya perjanjian distribusi resmi dengan kami. Di luar
+              itu, katalog kami juga memuat merek yang kami impor sendiri tanpa perjanjian
+              keagenan, di antaranya Öhlins, Akrapovič, Arai, dan Dainese. Keduanya
+              sama-sama barang orisinal. Yang berbeda hanya jalur masuknya.
             </p>
           </motion.div>
 

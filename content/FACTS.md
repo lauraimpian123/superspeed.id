@@ -55,6 +55,30 @@ dan tim balap sebagai bukti pendukung.
 `35 Championships`, `5,000+ Rider Network`, `100K+ Social Reach`, `50+ Event per Tahun`.
 Semuanya angka bulat tanpa dasar dan saling bertentangan dengan data rider.
 
+### 3b. Angka Operasional
+
+Angka-angka kecil ini muncul di badan teks berbagai halaman. Justru detail
+semacam inilah yang membuat tulisan terasa ditulis orang, jadi angkanya perlu
+dijaga tetap konsisten.
+
+| Item | Nilai | Muncul di |
+|---|---|---|
+| Isi katalog saat gerai pertama buka (2023) | 60 produk | Tentang Kami |
+| Batas jam pengiriman hari kerja | 15.00 | Beranda, Katalog Part |
+| Waktu kirim luar Jawa dan Bali | 3 sampai 5 hari | Katalog Part |
+| Uang muka pesanan khusus | 50% | Katalog Part |
+| Waktu pesanan khusus di luar katalog | 2 sampai 6 minggu | Katalog Part |
+| Indent ukuran langka (contoh: helm XXL) | Sekitar 3 minggu | Beranda |
+| Cicilan kartu kredit | Hingga 12 bulan | Katalog Part |
+| Kapasitas acara yang kami selenggarakan | Di bawah 200 peserta | Kemitraan |
+| Musim kejuaraan nasional | Maret sampai November | Kemitraan |
+| Masa percobaan karyawan | 3 bulan | Karier |
+| Pelatihan produk dari pemasok | 2 sampai 3 kali setahun | Karier |
+| Jatah seragam kerja | 2 setel per tahun | Karier |
+| Waktu balasan pertanyaan teknis | Hari yang sama, pada jam kerja | Tentang Kami |
+| Waktu balasan kemitraan dan lamaran | Sampai 1 minggu | Tentang Kami, Kemitraan |
+| Masa simpan berkas lamaran | 1 tahun | Karier |
+
 ---
 
 ## 4. Angka Tim Balap
@@ -93,12 +117,23 @@ Label di website harus menyebutkan hal ini agar tidak menyesatkan.
 
 ---
 
-## 5. Brand Resmi (12)
+## 5. Brand
+
+### Perjanjian distribusi resmi (12)
 
 Honda, Yamaha, Kawasaki, Suzuki, Ducati, BMW Motorrad, KTM, Aprilia, Husqvarna,
 MV Agusta, Triumph, Brembo.
 
-Jumlah ini harus konsisten di halaman Speed Shop, Partnerships, dan Beranda.
+Jumlah ini harus konsisten di halaman Katalog Part, Kemitraan, dan Beranda.
+
+### Impor sendiri tanpa keagenan
+
+Öhlins, Akrapovič, Arai, Dainese, Yoshimura, Marchesini, Woolich, JE Pistons.
+
+Merek-merek ini ada di katalog produk tetapi **tidak** terikat perjanjian
+distribusi. Karena itu website tidak boleh menyatakan bahwa daftar 12 brand di
+atas mencakup seluruh isi katalog. Pernyataan semacam itu sempat ada dan sudah
+dikoreksi; jangan dikembalikan.
 
 ---
 

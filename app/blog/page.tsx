@@ -203,9 +203,8 @@ export default function Blog() {
               LANGGANAN <span className="text-gradient-orange">ARTIKEL</span>
             </h3>
             <p className="text-gray-400 mt-4 max-w-xl mx-auto">
-              Kami mengirimkan ringkasan artikel baru sekitar sekali dalam dua minggu.
-              Tidak ada penawaran produk di dalamnya, dan Anda bisa berhenti berlangganan
-              kapan saja lewat tautan di setiap surel.
+              Layanan langganan surel sedang kami siapkan. Sementara ini, artikel baru
+              bisa Anda pantau langsung di halaman ini.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-8">
               <input type="email" placeholder="email@anda.com"

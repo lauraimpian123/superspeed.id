@@ -66,7 +66,7 @@ const results2026 = [
 ];
 
 const timeline = [
-  { year: "2026", event: "Tiga kemenangan dari tiga putaran pertama di kelas Superbike. Musim masih berjalan." },
+  { year: "2026", event: "Dua kemenangan Superbike dan satu kemenangan Supersport 600 dari tiga putaran pertama. Musim masih berjalan." },
   { year: "2025", event: "Program pembinaan rider junior dimulai. Damar Wicaksono masuk sebagai angkatan pertama." },
   { year: "2024", event: "Tim melebar ke tiga kelas sekaligus: Superbike, Supersport 600, dan Supersport 300." },
   { year: "2023", event: "Dua rider naik podium pada putaran yang sama untuk pertama kalinya." },

@@ -330,10 +330,16 @@ BANNED_PHRASES = [
     "secara keseluruhan, ",
 ]
 
-# Pola yang menandai statistik karangan berlabel lembaga.
+# Pola yang menandai statistik karangan berlabel lembaga, misalnya
+# "Data dari Automotive Aftermarket Association menunjukkan pasar tumbuh 18,7%".
+#
+# Kata kuncinya dicocokkan tanpa memedulikan huruf besar-kecil, sebab kalimat
+# semacam ini sering berada di awal paragraf. Nama lembaganya tetap harus
+# diawali huruf kapital, supaya kalimat yang sah seperti "data pengujian kami
+# menunjukkan" tidak ikut tertangkap.
 FABRICATED_STAT_PATTERN = (
-    r"(?:data|riset|studi|laporan|survei)\s+(?:dari\s+)?"
-    r"[A-Z][A-Za-z\s]{3,40}\s+(?:menunjukkan|mencatat|menyebut)"
+    r"(?i:data|riset|studi|laporan|survei)\s+(?:(?i:dari)\s+)?"
+    r"[A-Z][A-Za-z\s]{3,40}\s+(?i:menunjukkan|mencatat|menyebut|melaporkan)"
 )
 
 # ═══════════════════════════════════════════════════════════════
@@ -643,8 +649,11 @@ def sanitize(data):
         text = re.sub(r"\s*[—–]\s*", ", ", text)
         return re.sub(r",\s*,", ",", text)
 
+    # Hanya perbaiki kunci yang memang ada. Menulis string kosong untuk kunci
+    # yang tidak dikirim model akan mematikan nilai cadangan di generate_article().
     for key in ("title", "excerpt", "content", "metaTitle", "metaDescription"):
-        data[key] = fix(data.get(key, ""))
+        if data.get(key):
+            data[key] = fix(data[key])
     for item in data.get("faq") or []:
         item["question"] = fix(item.get("question", ""))
         item["answer"] = fix(item.get("answer", ""))
@@ -656,11 +665,23 @@ def count_words(html):
 
 
 def parse_json_reply(raw):
-    raw = raw.strip()
-    if raw.startswith("```"):
-        raw = raw.split("\n", 1)[1].rsplit("```", 1)[0]
+    """Ambil objek JSON dari jawaban model.
+
+    Model kadang membungkus jawaban dalam pagar kode, dengan atau tanpa baris
+    baru setelah pembukanya. Pengupasan pagar dijaga agar tidak pernah
+    melempar galat sendiri; bila gagal, pencarian objek JSON di bawah yang
+    akan menanganinya.
+    """
+    text = raw.strip()
+    if text.startswith("```"):
+        body = text[3:]
+        # Buang penanda bahasa seperti ```json bila ada.
+        if "\n" in body:
+            body = body.split("\n", 1)[1]
+        text = body.rsplit("```", 1)[0].strip()
+
     try:
-        return json.loads(raw)
+        return json.loads(text)
     except json.JSONDecodeError:
         match = re.search(r"\{[\s\S]*\}", raw)
         if not match:

@@ -99,8 +99,10 @@ export default function Partnerships() {
               DUA BELAS <span className="text-gradient-orange">MITRA</span>
             </h2>
             <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
-              Daftar ini sama persis dengan daftar brand di katalog. Kami tidak mencantumkan
-              merek yang hubungannya baru sebatas pembicaraan awal.
+              Dua belas merek ini terikat perjanjian distribusi resmi dengan kami. Katalog
+              kami memuat lebih banyak merek daripada daftar ini, sebab sebagian kami impor
+              sendiri tanpa keagenan. Kami tidak mencantumkan merek yang hubungannya baru
+              sebatas pembicaraan awal.
             </p>
           </motion.div>
 

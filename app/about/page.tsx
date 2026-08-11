@@ -8,7 +8,7 @@ const values = [
   {
     icon: "🏁",
     title: "Kami Pakai Dulu",
-    desc: "Produk masuk katalog setelah dipakai tim kami minimal satu musim. Cara ini membuat pilihan kami lebih sempit dibanding toko lain, tetapi kami bisa menjawab pertanyaan teknis apa pun tentang barang yang kami jual.",
+    desc: "Sebagian besar produk masuk katalog setelah dipakai tim kami minimal satu musim. Sisanya kami stok karena permintaan pembeli, dan untuk yang itu kami sampaikan terus terang bahwa kami belum mengujinya sendiri.",
   },
   {
     icon: "🤝",
