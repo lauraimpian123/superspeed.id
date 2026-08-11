@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { getArticleBySlug, getAllSlugs, getRelatedArticles } from "@/lib/articles";
 
 interface Props {
@@ -16,7 +15,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = getArticleBySlug(slug);
-  if (!article) return { title: "Article Not Found" };
+  if (!article) return { title: "Artikel Tidak Ditemukan | SuperSpeed.id" };
 
   return {
     title: article.metaTitle || `${article.title} | SuperSpeed.id`,
@@ -29,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       modifiedTime: article.dateModified,
       authors: [article.author],
       tags: article.tags,
-      siteName: "SuperSpeed Racing Team",
+      siteName: "SuperSpeed.id",
       locale: "id_ID",
       images: article.featuredImage ? [{ url: article.featuredImage }] : [],
     },
@@ -68,7 +67,7 @@ export default async function ArticlePage({ params }: Props) {
     },
     publisher: {
       "@type": "Organization",
-      name: "SuperSpeed Racing Team",
+      name: "SuperSpeed.id",
       url: "https://superspeed.id",
       logo: {
         "@type": "ImageObject",
@@ -91,8 +90,8 @@ export default async function ArticlePage({ params }: Props) {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://superspeed.id" },
-      { "@type": "ListItem", position: 2, name: "Blog", item: "https://superspeed.id/blog" },
+      { "@type": "ListItem", position: 1, name: "Beranda", item: "https://superspeed.id" },
+      { "@type": "ListItem", position: 2, name: "Artikel", item: "https://superspeed.id/blog" },
       { "@type": "ListItem", position: 3, name: article.title, item: `https://superspeed.id/blog/${slug}` },
     ],
   };
@@ -137,9 +136,9 @@ export default async function ArticlePage({ params }: Props) {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-xs text-gray-500 mb-8">
-            <Link href="/" className="hover:text-[#F5A623] transition-colors">Home</Link>
+            <Link href="/" className="hover:text-[#F5A623] transition-colors">Beranda</Link>
             <span>›</span>
-            <Link href="/blog" className="hover:text-[#F5A623] transition-colors">Blog</Link>
+            <Link href="/blog" className="hover:text-[#F5A623] transition-colors">Artikel</Link>
             <span>›</span>
             <span className="text-gray-400 truncate">{article.title}</span>
           </nav>
@@ -185,7 +184,7 @@ export default async function ArticlePage({ params }: Props) {
           {article.faq?.length > 0 && (
             <section className="mt-16 bg-[#1A1A1A] carbon-texture rounded-lg p-8 glow-border">
               <h2 className="font-orbitron text-2xl font-bold text-white mb-6">
-                FAQ — <span className="text-gradient-orange">Pertanyaan Umum</span>
+                PERTANYAAN <span className="text-gradient-orange">YANG SERING MUNCUL</span>
               </h2>
               <div className="space-y-6">
                 {article.faq.map((f, i) => (
@@ -229,7 +228,7 @@ export default async function ArticlePage({ params }: Props) {
               <svg className="w-4 h-4 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-              Kembali ke Blog
+              Kembali ke Daftar Artikel
             </Link>
           </div>
         </div>

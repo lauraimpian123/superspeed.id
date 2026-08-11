@@ -10,9 +10,9 @@ export default function PrivacyPolicy() {
         <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
           {/* Header */}
           <div className="mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Legal</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Dokumen Hukum</span>
             <h1 className="font-orbitron text-4xl md:text-6xl font-black mt-2">
-              PRIVACY <span className="text-gradient-orange">POLICY</span>
+              KEBIJAKAN <span className="text-gradient-orange">PRIVASI</span>
             </h1>
             <p className="text-gray-400 mt-4">Terakhir diperbarui: 25 Juli 2026</p>
           </div>
@@ -22,10 +22,9 @@ export default function PrivacyPolicy() {
             <section>
               <h2 className="font-orbitron text-xl font-bold text-white mb-4">1. Pendahuluan</h2>
               <p>
-                SuperSpeed Racing Team (&ldquo;kami&rdquo;, &ldquo;SuperSpeed&rdquo;) menghargai privasi Anda. 
-                Kebijakan privasi ini menjelaskan bagaimana kami mengumpulkan, menggunakan, menyimpan, 
-                dan melindungi informasi pribadi Anda ketika Anda menggunakan website superspeed.id 
-                dan layanan kami.
+                SuperSpeed.id (&ldquo;kami&rdquo;) mengelola data pribadi pelanggan sebagaimana
+                diuraikan pada dokumen ini. Kebijakan ini berlaku untuk pembelian melalui
+                situs superspeed.id maupun transaksi di gerai kami di Mataram dan Jakarta Barat.
               </p>
             </section>
 
@@ -146,10 +145,10 @@ export default function PrivacyPolicy() {
                 hak Anda terkait data pribadi, silakan hubungi kami:
               </p>
               <div className="bg-[#1A1A1A] carbon-texture rounded-lg p-6 glow-border space-y-2">
-                <p><strong className="text-white">SuperSpeed Racing Team</strong></p>
+                <p><strong className="text-white">SuperSpeed.id</strong></p>
                 <p>Email: privacy@superspeed.id</p>
-                <p>WhatsApp: +62 XXX XXXX XXXX</p>
-                <p>Alamat: Kawasan Ekonomi Khusus Mandalika, Lombok Tengah, NTB, Indonesia</p>
+                <p>WhatsApp: +62 812-0000-0000</p>
+                <p>Alamat: Mataram, Lombok, Nusa Tenggara Barat, Indonesia</p>
               </div>
             </section>
           </div>

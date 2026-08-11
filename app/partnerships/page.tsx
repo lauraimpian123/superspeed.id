@@ -2,66 +2,65 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Link from "next/link";
 
 const currentPartners = [
-  { name: "Honda", type: "Manufacturer Partner", desc: "Part original Honda Racing untuk semua model sport dan racing." },
-  { name: "Yamaha", type: "Manufacturer Partner", desc: "Yamaha Racing genuine parts dan aksesoris performa tinggi." },
-  { name: "Kawasaki", type: "Manufacturer Partner", desc: "Kawasaki performance parts termasuk ZX-10RR racing components." },
-  { name: "Suzuki", type: "Manufacturer Partner", desc: "Suzuki Racing parts dan GSX-R series performance components." },
-  { name: "Ducati", type: "Premium Partner", desc: "Ducati Performance catalogue dan Panigale racing parts." },
-  { name: "BMW Motorrad", type: "Premium Partner", desc: "BMW Motorrad HP parts dan S1000RR racing components." },
-  { name: "KTM", type: "PowerParts Partner", desc: "KTM PowerParts dan RC series racing accessories." },
-  { name: "Aprilia", type: "Racing Partner", desc: "Aprilia Racing parts dan RSV4 performance components." },
-  { name: "Brembo", type: "Braking Partner", desc: "Brembo Racing brake systems, calipers, dan master cylinders." },
-  { name: "Husqvarna", type: "Partner", desc: "Husqvarna functional clothing dan performance accessories." },
-  { name: "MV Agusta", type: "Premium Partner", desc: "MV Agusta genuine parts dan limited edition accessories." },
-  { name: "Triumph", type: "Partner", desc: "Triumph genuine accessories dan performance parts." },
+  { name: "Honda", type: "Pabrikan", desc: "Part orisinal Honda Racing untuk model sport dan balap." },
+  { name: "Yamaha", type: "Pabrikan", desc: "Part orisinal Yamaha Racing dan aksesori performa." },
+  { name: "Kawasaki", type: "Pabrikan", desc: "Part performa Kawasaki, termasuk komponen balap ZX-10RR." },
+  { name: "Suzuki", type: "Pabrikan", desc: "Part balap Suzuki dan komponen performa seri GSX-R." },
+  { name: "Ducati", type: "Mitra Premium", desc: "Katalog Ducati Performance dan part balap Panigale." },
+  { name: "BMW Motorrad", type: "Mitra Premium", desc: "Lini part HP dan komponen balap S1000RR." },
+  { name: "KTM", type: "Mitra PowerParts", desc: "KTM PowerParts dan aksesori balap seri RC." },
+  { name: "Aprilia", type: "Mitra Balap", desc: "Part Aprilia Racing dan komponen performa RSV4." },
+  { name: "Brembo", type: "Mitra Pengereman", desc: "Sistem pengereman Brembo Racing, caliper, dan master rem." },
+  { name: "Husqvarna", type: "Mitra", desc: "Perlengkapan berkendara dan aksesori performa Husqvarna." },
+  { name: "MV Agusta", type: "Mitra Premium", desc: "Part orisinal dan aksesori edisi terbatas MV Agusta." },
+  { name: "Triumph", type: "Mitra", desc: "Aksesori orisinal dan part performa Triumph." },
 ];
 
 const partnershipTypes = [
   {
-    title: "Brand Partnership",
+    title: "Distribusi Produk",
     icon: "🏷️",
-    desc: "Menjadi official dealer atau distributor produk Anda di Indonesia. Akses ke jaringan rider dan bengkel racing kami.",
+    desc: "Kami menjadi penyalur produk Anda di Indonesia, dengan penempatan di katalog online dan di kedua gerai fisik.",
     benefits: [
-      "Showcase produk di website dan showroom",
-      "Eksposur di event balap nasional",
-      "Database 5,000+ rider aktif di Indonesia",
-      "Testing produk oleh tim balap profesional",
+      "Penempatan di katalog online dan rak gerai",
+      "Pengujian produk oleh tim balap kami sebelum dipasarkan",
+      "Laporan penjualan per kuartal",
+      "Kami minta hak retur untuk barang cacat produksi",
     ],
   },
   {
-    title: "Sponsorship",
+    title: "Sponsor Tim Balap",
     icon: "🏎️",
-    desc: "Sponsori SuperSpeed Racing Team dan dapatkan eksposur langsung di sirkuit, media, dan komunitas motorsport.",
+    desc: "Menempelkan merek Anda pada motor dan perlengkapan tim sepanjang musim kejuaraan nasional.",
     benefits: [
-      "Logo di motor balap & riding gear",
-      "Eksposur TV dan media sosial",
-      "Akses VIP ke semua event balap",
-      "Content & marketing collaboration",
+      "Logo pada bodi motor dan wearpack rider",
+      "Penyebutan pada unggahan media sosial tim",
+      "Akses ke area paddock pada hari balapan",
+      "Musim berjalan dari Maret sampai November",
     ],
   },
   {
-    title: "Technical Partnership",
+    title: "Pengembangan Teknis",
     icon: "🔧",
-    desc: "Kolaborasi pengembangan produk dan teknologi. Tim engineer kami siap menjadi testing ground untuk inovasi Anda.",
+    desc: "Kami menguji produk Anda di Mandalika dan menyerahkan datanya, termasuk ketika hasilnya buruk.",
     benefits: [
-      "Real-world testing di Sirkuit Mandalika",
-      "Feedback dari mekanik dan rider profesional",
-      "Data telemetry dan performa",
-      "Co-development program",
+      "Pengujian di kondisi aspal panas Mandalika",
+      "Data telemetri mentah, bukan hanya ringkasan",
+      "Catatan keluhan dari rider dan mekanik",
+      "Laporan diserahkan apa adanya tanpa penyaringan",
     ],
   },
   {
-    title: "Event & Community",
+    title: "Acara dan Komunitas",
     icon: "🎪",
-    desc: "Partner untuk event motorsport, track day, dan community gathering. Jangkau ribuan enthusiast secara langsung.",
+    desc: "Kerja sama penyelenggaraan track day dan kelas teknis untuk komunitas pengendara di Lombok dan Jakarta.",
     benefits: [
-      "Co-hosting track day events",
-      "Community meetup sponsorship",
-      "Riding clinic & workshop",
-      "Product launch events",
+      "Penyelenggaraan track day bersama",
+      "Kelas teknis perawatan dan setelan",
+      "Peluncuran produk di gerai",
+      "Skala acara kami umumnya di bawah 200 peserta",
     ],
   },
 ];
@@ -71,20 +70,20 @@ export default function Partnerships() {
     <div className="min-h-screen bg-[#0A0A0A] pt-24">
       {/* Hero */}
       <section className="relative h-[45vh] min-h-[350px] overflow-hidden">
-        <Image src="/images/fnf-lineup.png" alt="Partnerships" fill className="object-cover" priority />
+        <Image src="/images/fnf-lineup.png" alt="Kemitraan SuperSpeed.id" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/70 via-[#0A0A0A]/40 to-[#0A0A0A]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-transparent to-transparent" />
 
         <div className="relative z-10 h-full flex items-end pb-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Grow Together</span>
+              <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Untuk Merek dan Distributor</span>
               <h1 className="font-orbitron text-5xl md:text-7xl font-black mt-2">
-                PARTNER<span className="text-gradient-orange">SHIPS</span>
+                KEMIT<span className="text-gradient-orange">RAAN</span>
               </h1>
               <p className="text-gray-300 text-lg max-w-xl mt-3">
-                Bergabunglah dengan ekosistem motorsport terbesar di Indonesia. 
-                Mari tumbuh bersama SuperSpeed.
+                Empat bentuk kerja sama yang kami buka, lengkap dengan apa yang Anda dapat
+                dan apa yang kami minta sebagai imbalannya.
               </p>
             </motion.div>
           </div>
@@ -95,12 +94,15 @@ export default function Partnerships() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Trusted By The Best</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Yang Sudah Berjalan</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
-              PARTNER <span className="text-gradient-orange">KAMI</span>
+              DUA BELAS <span className="text-gradient-orange">MITRA</span>
             </h2>
-            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-              Kami bangga bermitra dengan brand-brand otomotif roda dua terbaik di dunia
+            <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
+              Dua belas merek ini terikat perjanjian distribusi resmi dengan kami. Katalog
+              kami memuat lebih banyak merek daripada daftar ini, sebab sebagian kami impor
+              sendiri tanpa keagenan. Kami tidak mencantumkan merek yang hubungannya baru
+              sebatas pembicaraan awal.
             </p>
           </motion.div>
 
@@ -128,7 +130,7 @@ export default function Partnerships() {
       <section className="py-24 tech-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Partnership Options</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Pilihan yang Tersedia</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
               JENIS <span className="text-gradient-orange">KEMITRAAN</span>
             </h2>
@@ -144,7 +146,7 @@ export default function Partnerships() {
                   <h3 className="font-orbitron text-xl font-bold text-white">{type.title}</h3>
                 </div>
                 <p className="text-gray-400 mb-6">{type.desc}</p>
-                <h4 className="text-xs uppercase tracking-wider text-[#F5A623] font-bold mb-3">Benefits:</h4>
+                <h4 className="text-xs uppercase tracking-wider text-[#F5A623] font-bold mb-3">Yang Anda dapat:</h4>
                 <ul className="space-y-2">
                   {type.benefits.map((b, j) => (
                     <li key={j} className="flex items-start gap-3 text-sm text-gray-300">
@@ -165,10 +167,10 @@ export default function Partnerships() {
             className="grid grid-cols-2 md:grid-cols-4 gap-6"
           >
             {[
-              { value: "5,000+", label: "Rider Network" },
-              { value: "12", label: "Brand Partners" },
-              { value: "50+", label: "Event per Tahun" },
-              { value: "100K+", label: "Social Reach" },
+              { value: "6.842", label: "Pesanan Terkirim" },
+              { value: "12", label: "Mitra Aktif" },
+              { value: "437", label: "Produk di Katalog" },
+              { value: "2", label: "Gerai Fisik" },
             ].map((stat, i) => (
               <div key={i} className="text-center p-8 bg-[#1A1A1A] carbon-texture rounded-lg glow-border">
                 <div className="font-orbitron text-3xl md:text-4xl font-black text-gradient-orange">{stat.value}</div>
@@ -176,6 +178,11 @@ export default function Partnerships() {
               </div>
             ))}
           </motion.div>
+          <p className="text-xs text-gray-500 text-center mt-6 max-w-2xl mx-auto leading-relaxed">
+            Angka pesanan dihitung sejak gerai pertama buka pada 2023 sampai kuartal
+            berjalan. Kami tidak mencantumkan angka jangkauan media sosial karena metrik itu
+            terlalu mudah dibesarkan dan tidak menggambarkan daya beli.
+          </p>
         </div>
       </section>
 
@@ -186,20 +193,22 @@ export default function Partnerships() {
             <h2 className="font-orbitron text-4xl md:text-5xl font-black">
               MARI <span className="text-gradient-orange">BERMITRA</span>
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Tertarik menjadi partner SuperSpeed? Hubungi tim business development kami 
-              untuk mendiskusikan peluang kemitraan yang saling menguntungkan.
+            <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              Kirimkan profil perusahaan dan daftar produk Anda melalui surel. Kami membaca
+              semuanya, tetapi balasan bisa memakan waktu sampai satu minggu karena urusan
+              kemitraan ditangani langsung oleh Team Principal. Untuk produk yang belum
+              pernah kami uji, kami biasanya minta sampel lebih dulu sebelum membahas angka.
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               <button className="btn-racing px-10 py-4 rounded text-sm uppercase tracking-wider">
-                Hubungi Kami
+                Kirim Profil Perusahaan
               </button>
               <button className="btn-outline-racing px-10 py-4 rounded text-sm uppercase tracking-wider">
-                Download Proposal
+                Unduh Berkas Kemitraan
               </button>
             </div>
             <p className="text-sm text-gray-500 pt-4">
-              Email: partnerships@superspeed.id | WhatsApp: +62 XXX XXXX XXXX
+              Surel partnerships@superspeed.id atau WhatsApp +62 812-0000-0000
             </p>
           </motion.div>
         </div>

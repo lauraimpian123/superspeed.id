@@ -17,15 +17,19 @@ const orbitron = Orbitron({
 });
 
 export const metadata: Metadata = {
-  title: "SuperSpeed Racing Team | Professional Motorsport & Speed Shop",
-  description: "Indonesia's premier racing team and speed shop. Championship-winning performance, professional racing gear, and the latest motorsport insights.",
-  keywords: "superspeed, racing team, speed shop, motorsport, racing gear, Indonesia racing",
+  metadataBase: new URL("https://superspeed.id"),
+  title: "SuperSpeed.id | Toko Part Racing Online dan Gerai di Lombok & Jakarta",
+  description:
+    "Toko part racing dengan 437 produk dalam tujuh kategori. Belanja online dengan pengiriman ke seluruh Indonesia, atau datang langsung ke gerai kami di Mataram dan Jakarta Barat.",
+  keywords:
+    "part racing, toko part motor, sparepart racing Indonesia, Brembo, Akrapovic, Ohlins, part motor Lombok, part motor Jakarta",
   openGraph: {
-    title: "SuperSpeed Racing Team",
-    description: "Indonesia's premier racing team and speed shop",
+    title: "SuperSpeed.id | Toko Part Racing Online dan Offline",
+    description:
+      "437 produk part dan perlengkapan berkendara. Dikelola oleh tim yang membalap di Mandalika sejak 2021.",
     type: "website",
     locale: "id_ID",
-    siteName: "SuperSpeed Racing Team",
+    siteName: "SuperSpeed.id",
   },
 };
 

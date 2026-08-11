@@ -4,11 +4,11 @@ import Link from "next/link";
 import { getAllArticles } from "@/lib/articles";
 
 export const metadata: Metadata = {
-  title: "Blog Otomotif Indonesia — Review Motor, Part Racing & Tips | SuperSpeed.id",
-  description: "Artikel terbaru tentang motor matic, superbike, motocross, dan review part racing di Indonesia. Tips modifikasi, perbandingan motor, dan berita otomotif.",
+  title: "Artikel Otomotif: Ulasan Part, Panduan Pemasangan, dan Catatan Lintasan | SuperSpeed.id",
+  description: "Ulasan part racing, panduan pemasangan, dan catatan pengujian dari lintasan Mandalika. Ditulis oleh tim yang memakai sendiri barang yang mereka jual.",
   openGraph: {
-    title: "Blog Otomotif Indonesia | SuperSpeed.id",
-    description: "Review motor, part racing, tips modifikasi, dan berita otomotif terkini.",
+    title: "Artikel Otomotif | SuperSpeed.id",
+    description: "Ulasan part, panduan pemasangan, dan catatan pengujian dari lintasan.",
     type: "website",
     locale: "id_ID",
   },
@@ -41,12 +41,12 @@ export default function Blog() {
   const orgSchema = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "SuperSpeed Blog",
-    description: "Blog otomotif Indonesia — review motor, part racing, tips modifikasi",
+    name: "Artikel SuperSpeed.id",
+    description: "Ulasan part racing, panduan pemasangan, dan catatan pengujian lintasan",
     url: "https://superspeed.id/blog",
     publisher: {
       "@type": "Organization",
-      name: "SuperSpeed Racing Team",
+      name: "SuperSpeed.id",
       url: "https://superspeed.id",
     },
     inLanguage: "id-ID",
@@ -69,14 +69,15 @@ export default function Blog() {
           <div className="relative z-10 h-full flex items-end pb-16">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
               <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">
-                Update Otomotif Indonesia
+                Catatan dari Gerai dan Lintasan
               </span>
               <h1 className="font-orbitron text-5xl md:text-7xl font-black mt-2">
-                RACING <span className="text-gradient-orange">BLOG</span>
+                ARTI<span className="text-gradient-orange">KEL</span>
               </h1>
               <p className="text-gray-300 text-lg max-w-xl mt-3">
-                Review motor, part racing, tips modifikasi, dan berita otomotif terkini 
-                langsung dari tim SuperSpeed Racing.
+                Ulasan part, panduan pemasangan, dan hasil pengujian di Mandalika. Kami
+                menuliskan juga produk yang mengecewakan, sebab itu justru yang paling
+                sering ditanyakan.
               </p>
             </div>
           </div>
@@ -97,11 +98,10 @@ export default function Blog() {
             <div className="text-center py-24">
               <div className="text-6xl mb-6">🏍️</div>
               <h2 className="font-orbitron text-3xl font-bold text-white mb-4">
-                COMING <span className="text-gradient-orange">SOON</span>
+                BELUM <span className="text-gradient-orange">ADA ARTIKEL</span>
               </h2>
               <p className="text-gray-400 max-w-md mx-auto">
-                Artikel pertama sedang dalam proses pembuatan. Kembali lagi besok untuk 
-                membaca review motor, part racing, dan tips otomotif terbaru!
+                Artikel pertama sedang disusun. Silakan kembali beberapa hari lagi.
               </p>
             </div>
           )}
@@ -200,10 +200,11 @@ export default function Blog() {
           {/* Newsletter */}
           <div className="mt-24 p-12 bg-[#1A1A1A] carbon-texture rounded-lg glow-border text-center">
             <h3 className="font-orbitron text-2xl md:text-3xl font-bold">
-              UPDATE <span className="text-gradient-orange">OTOMOTIF</span>
+              LANGGANAN <span className="text-gradient-orange">ARTIKEL</span>
             </h3>
             <p className="text-gray-400 mt-4 max-w-xl mx-auto">
-              Dapatkan review motor, tips modifikasi, dan berita racing terbaru langsung ke inbox Anda.
+              Layanan langganan surel sedang kami siapkan. Sementara ini, artikel baru
+              bisa Anda pantau langsung di halaman ini.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto mt-8">
               <input type="email" placeholder="email@anda.com"

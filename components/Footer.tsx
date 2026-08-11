@@ -3,24 +3,37 @@ import Image from "next/image";
 
 const footerLinks = {
   navigation: [
-    { name: "Home", href: "/" },
-    { name: "Speed Shop", href: "/speed-shop" },
-    { name: "Racing Team", href: "/racing-team" },
-    { name: "Blog", href: "/blog" },
+    { name: "Beranda", href: "/" },
+    { name: "Katalog Part", href: "/speed-shop" },
+    { name: "Tim Balap", href: "/racing-team" },
+    { name: "Artikel", href: "/blog" },
   ],
   shop: [
-    { name: "Helmets", href: "/speed-shop" },
-    { name: "Racing Suits", href: "/speed-shop" },
-    { name: "Performance Parts", href: "/speed-shop" },
-    { name: "Accessories", href: "/speed-shop" },
+    { name: "Sistem Pengereman", href: "/speed-shop" },
+    { name: "Suspensi", href: "/speed-shop" },
+    { name: "Knalpot", href: "/speed-shop" },
+    { name: "Perlengkapan Berkendara", href: "/speed-shop" },
   ],
   company: [
-    { name: "About Us", href: "/about" },
-    { name: "Partnerships", href: "/partnerships" },
-    { name: "Careers", href: "/careers" },
-    { name: "Privacy Policy", href: "/privacy-policy" },
+    { name: "Tentang Kami", href: "/about" },
+    { name: "Kemitraan", href: "/partnerships" },
+    { name: "Karier", href: "/careers" },
+    { name: "Kebijakan Privasi", href: "/privacy-policy" },
   ],
 };
+
+const outlets = [
+  {
+    city: "Mataram",
+    area: "Lombok, Nusa Tenggara Barat",
+    hours: "Senin sampai Sabtu, 09.00 sampai 18.00 WITA",
+  },
+  {
+    city: "Jakarta Barat",
+    area: "Kebon Jeruk, DKI Jakarta",
+    hours: "Senin sampai Sabtu, 09.00 sampai 18.00 WIB",
+  },
+];
 
 export default function Footer() {
   return (
@@ -34,15 +47,33 @@ export default function Footer() {
           <div className="lg:col-span-2 space-y-6">
             <Image
               src="/logo-superspeed.png"
-              alt="SuperSpeed Racing Team"
+              alt="SuperSpeed.id"
               width={280}
               height={75}
               className="h-18 md:h-20 w-auto object-contain"
             />
             <p className="text-gray-400 text-sm leading-relaxed max-w-sm">
-              Indonesia's premier racing team and speed shop. Championship-winning 
-              performance meets professional-grade equipment for serious racers.
+              Toko part racing dengan 437 produk dalam tujuh kategori. Kami menjual
+              barang yang kami pakai sendiri di lintasan Mandalika sejak 2021.
             </p>
+            <div className="space-y-4">
+              {outlets.map((outlet) => (
+                <div key={outlet.city} className="text-sm">
+                  <p className="text-white font-semibold">Gerai {outlet.city}</p>
+                  <p className="text-gray-400">{outlet.area}</p>
+                  <p className="text-gray-500 text-xs mt-0.5">{outlet.hours}</p>
+                </div>
+              ))}
+              <div className="text-sm pt-1">
+                <p className="text-gray-400">
+                  Email:{" "}
+                  <a href="mailto:halo@superspeed.id" className="hover:text-[#F5A623] transition-colors">
+                    halo@superspeed.id
+                  </a>
+                </p>
+                <p className="text-gray-400">WhatsApp: +62 812-0000-0000</p>
+              </div>
+            </div>
             {/* Social Icons */}
             <div className="flex gap-4">
               {["instagram", "youtube", "twitter", "facebook"].map((social) => (
@@ -61,7 +92,7 @@ export default function Footer() {
           {/* Navigation */}
           <div>
             <h4 className="font-orbitron text-xs font-bold uppercase tracking-[0.2em] text-[#F5A623] mb-6">
-              Navigation
+              Navigasi
             </h4>
             <ul className="space-y-3">
               {footerLinks.navigation.map((link) => (
@@ -80,7 +111,7 @@ export default function Footer() {
           {/* Shop */}
           <div>
             <h4 className="font-orbitron text-xs font-bold uppercase tracking-[0.2em] text-[#F5A623] mb-6">
-              Speed Shop
+              Kategori Part
             </h4>
             <ul className="space-y-3">
               {footerLinks.shop.map((link) => (
@@ -99,7 +130,7 @@ export default function Footer() {
           {/* Company */}
           <div>
             <h4 className="font-orbitron text-xs font-bold uppercase tracking-[0.2em] text-[#F5A623] mb-6">
-              Company
+              Perusahaan
             </h4>
             <ul className="space-y-3">
               {footerLinks.company.map((link) => (
@@ -119,10 +150,10 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500">
-            &copy; {new Date().getFullYear()} SuperSpeed Racing Team. All rights reserved.
+            &copy; {new Date().getFullYear()} SuperSpeed.id. Seluruh hak cipta dilindungi.
           </p>
           <p className="text-xs text-gray-600">
-            Built for speed. Designed for champions.
+            Harga di katalog belum termasuk biaya pemasangan.
           </p>
         </div>
       </div>

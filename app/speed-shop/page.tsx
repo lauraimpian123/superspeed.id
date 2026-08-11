@@ -6,62 +6,62 @@ import Image from "next/image";
 import Link from "next/link";
 
 const brands = [
-  { name: "Honda", country: "Japan", tagline: "The Power of Dreams" },
-  { name: "Yamaha", country: "Japan", tagline: "Revs Your Heart" },
-  { name: "Kawasaki", country: "Japan", tagline: "Let the Good Times Roll" },
-  { name: "Suzuki", country: "Japan", tagline: "Way of Life" },
-  { name: "Ducati", country: "Italy", tagline: "Racing DNA" },
-  { name: "BMW Motorrad", country: "Germany", tagline: "Make Life a Ride" },
+  { name: "Honda", country: "Jepang", tagline: "The Power of Dreams" },
+  { name: "Yamaha", country: "Jepang", tagline: "Revs Your Heart" },
+  { name: "Kawasaki", country: "Jepang", tagline: "Let the Good Times Roll" },
+  { name: "Suzuki", country: "Jepang", tagline: "Way of Life" },
+  { name: "Ducati", country: "Italia", tagline: "Racing DNA" },
+  { name: "BMW Motorrad", country: "Jerman", tagline: "Make Life a Ride" },
   { name: "KTM", country: "Austria", tagline: "Ready to Race" },
-  { name: "Aprilia", country: "Italy", tagline: "Be a Racer" },
-  { name: "Husqvarna", country: "Sweden", tagline: "Pioneering Since 1903" },
-  { name: "MV Agusta", country: "Italy", tagline: "Motorcycle Art" },
-  { name: "Triumph", country: "UK", tagline: "For the Ride" },
-  { name: "Brembo", country: "Italy", tagline: "Braking Excellence" },
+  { name: "Aprilia", country: "Italia", tagline: "Be a Racer" },
+  { name: "Husqvarna", country: "Swedia", tagline: "Pioneering Since 1903" },
+  { name: "MV Agusta", country: "Italia", tagline: "Motorcycle Art" },
+  { name: "Triumph", country: "Inggris", tagline: "For the Ride" },
+  { name: "Brembo", country: "Italia", tagline: "Braking Excellence" },
 ];
 
 const advantages = [
   {
     icon: "🏆",
-    title: "Official Distributor",
-    desc: "Partner resmi brand-brand racing kelas dunia. Semua part dijamin 100% original dengan garansi resmi.",
+    title: "Semua Barang Orisinal",
+    desc: "Dua belas merek kami ambil lewat jalur distribusi resmi, lengkap dengan kartu garansi pabrikan. Sisanya kami impor sendiri tanpa keagenan, dan untuk yang itu garansinya kami tanggung sendiri. Kami tidak menjual barang tiruan maupun bekas balap.",
   },
   {
     icon: "🔧",
-    title: "Expert Technical Support",
-    desc: "Tim mekanik berpengalaman siap membantu konsultasi dan pemasangan. Dari setup street hingga full race spec.",
+    title: "Konsultasi Sebelum Membeli",
+    desc: "Kirimkan tipe dan tahun motor Anda, nanti kami cek kecocokannya tanpa biaya. Kalau part yang Anda incar ternyata tidak cocok, kami sampaikan sejak awal.",
   },
   {
     icon: "🚚",
-    title: "Pengiriman Seluruh Indonesia",
-    desc: "Free shipping untuk pembelian di atas Rp 5 juta. Same-day delivery untuk area Jabodetabek dan Lombok.",
+    title: "Pengiriman ke Seluruh Indonesia",
+    desc: "Pesanan yang masuk sebelum pukul 15.00 pada hari kerja berangkat di hari yang sama. Gratis ongkir untuk pembelian di atas Rp 5.000.000. Untuk luar Jawa dan Bali, waktu tempuh biasanya tiga sampai lima hari.",
   },
   {
     icon: "💰",
-    title: "Harga Kompetitif",
-    desc: "Direct import tanpa perantara. Harga terbaik untuk kualitas racing-grade. Tersedia cicilan 0% hingga 12 bulan.",
+    title: "Harga Impor Langsung",
+    desc: "Kami mengimpor sendiri tanpa perantara, sehingga harga bisa ditekan. Tersedia cicilan hingga 12 bulan melalui kartu kredit bank rekanan.",
   },
   {
     icon: "🛡️",
-    title: "Garansi & After Sales",
-    desc: "Garansi resmi untuk setiap produk. Return policy 14 hari. Customer service 24/7 via WhatsApp.",
+    title: "Pengembalian dalam 14 Hari",
+    desc: "Barang bisa dikembalikan dalam 14 hari selama belum dipasang dan segelnya masih utuh. Setelah dipasang, penukaran hanya berlaku untuk cacat produksi.",
   },
   {
     icon: "🏁",
-    title: "Race-Proven Products",
-    desc: "Setiap part yang kami jual sudah teruji di sirkuit. Dipakai oleh SuperSpeed Racing Team di kejuaraan Superbike nasional.",
+    title: "Sudah Dipakai Tim Sendiri",
+    desc: "Sebagian besar isi katalog sudah lebih dulu dipakai tim balap kami di Mandalika. Beberapa produk justru tidak masuk katalog karena hasil pengujiannya mengecewakan.",
   },
 ];
 
 const categories = [
   { id: "all", name: "Semua Part" },
-  { id: "engine", name: "Engine & Performance" },
-  { id: "brake", name: "Brake System" },
-  { id: "suspension", name: "Suspension" },
-  { id: "exhaust", name: "Exhaust System" },
-  { id: "body", name: "Body & Fairing" },
-  { id: "safety", name: "Safety Gear" },
-  { id: "electronics", name: "Electronics" },
+  { id: "engine", name: "Mesin & Performa" },
+  { id: "brake", name: "Sistem Pengereman" },
+  { id: "suspension", name: "Suspensi" },
+  { id: "exhaust", name: "Knalpot" },
+  { id: "body", name: "Bodi & Fairing" },
+  { id: "safety", name: "Perlengkapan Berkendara" },
+  { id: "electronics", name: "Kelistrikan" },
 ];
 
 const products = [
@@ -71,8 +71,8 @@ const products = [
     brand: "Brembo",
     category: "brake",
     price: 18500000,
-    badge: "Best Seller",
-    specs: "Radial Mount | 4-Piston | CNC Billet | MotoGP Tech",
+    badge: "Paling Laris",
+    specs: "Dudukan radial | 4 piston | CNC billet | teknologi MotoGP",
   },
   {
     id: 2,
@@ -80,8 +80,8 @@ const products = [
     brand: "Akrapovič",
     category: "exhaust",
     price: 32000000,
-    badge: "Race Grade",
-    specs: "Titanium | Slip-On + Header | Euro5 | -4.2kg",
+    badge: "Spesifikasi Balap",
+    specs: "Titanium | slip-on dan header | Euro5 | lebih ringan 4,2 kg",
   },
   {
     id: 3,
@@ -89,7 +89,7 @@ const products = [
     brand: "Öhlins",
     category: "suspension",
     price: 28000000,
-    specs: "Through-Rod | 46mm Piston | Pressurized | Adjustable",
+    specs: "Through-rod | piston 46 mm | bertekanan | bisa disetel",
   },
   {
     id: 4,
@@ -97,8 +97,8 @@ const products = [
     brand: "Arai",
     category: "safety",
     price: 15800000,
-    badge: "New Arrival",
-    specs: "Snell M2020 | PB-SNC2 Shell | VAS-V ProShade",
+    badge: "Baru Datang",
+    specs: "Snell M2020 | batok PB-SNC2 | visor VAS-V ProShade",
   },
   {
     id: 5,
@@ -106,7 +106,7 @@ const products = [
     brand: "Woolich",
     category: "electronics",
     price: 12000000,
-    specs: "Full Map Edit | Quickshifter | Launch Control | Data Log",
+    specs: "Ubah map penuh | quickshifter | launch control | perekam data",
   },
   {
     id: 6,
@@ -114,8 +114,8 @@ const products = [
     brand: "Marchesini",
     category: "body",
     price: 45000000,
-    badge: "Pro Grade",
-    specs: "Forged Magnesium | -2.8kg vs Stock | WSBK Spec",
+    badge: "Kelas Profesional",
+    specs: "Magnesium tempa | lebih ringan 2,8 kg dari standar | spek WSBK",
   },
   {
     id: 7,
@@ -123,7 +123,7 @@ const products = [
     brand: "Yoshimura",
     category: "exhaust",
     price: 22000000,
-    specs: "Stainless/Carbon | Works Finish | +8HP Gain",
+    specs: "Stainless dan karbon | finis works | tambahan 8 HP",
   },
   {
     id: 8,
@@ -131,7 +131,7 @@ const products = [
     brand: "JE Pistons",
     category: "engine",
     price: 8500000,
-    specs: "Forged | High Compression | Ceramic Coated | Race Spec",
+    specs: "Tempa | kompresi tinggi | lapis keramik | spek balap",
   },
   {
     id: 9,
@@ -139,8 +139,8 @@ const products = [
     brand: "Dainese",
     category: "safety",
     price: 38000000,
-    badge: "MotoGP Tech",
-    specs: "D-Air Airbag | Kangaroo Leather | CE Level 2 | Custom Fit",
+    badge: "Teknologi MotoGP",
+    specs: "Airbag D-Air | kulit kanguru | CE Level 2 | jahitan custom",
   },
 ];
 
@@ -156,7 +156,7 @@ export default function SpeedShop() {
     <div className="min-h-screen bg-[#0A0A0A] pt-24">
       {/* Hero Banner */}
       <section className="relative h-[55vh] min-h-[450px] overflow-hidden">
-        <Image src="/images/speed-shop-banner.png" alt="Speed Shop" fill className="object-cover" priority />
+        <Image src="/images/speed-shop-banner.png" alt="Katalog part SuperSpeed.id" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0A0A0A]/60 via-[#0A0A0A]/30 to-[#0A0A0A]" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/80 via-transparent to-transparent" />
 
@@ -164,14 +164,15 @@ export default function SpeedShop() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
               <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">
-                Toko Part Racing #1 Indonesia
+                437 Produk dalam Tujuh Kategori
               </span>
               <h1 className="font-orbitron text-5xl md:text-7xl font-black">
-                SPEED <span className="text-gradient-orange">SHOP</span>
+                KATALOG <span className="text-gradient-orange">PART</span>
               </h1>
               <p className="text-gray-300 text-lg max-w-xl">
-                Dari paddock ke jalan raya. Part racing kelas dunia, langsung dari 
-                brand-brand terbaik. Dipakai tim kami, tersedia untuk Anda.
+                Tujuh kategori, dari sistem pengereman sampai perlengkapan berkendara.
+                Harga yang tercantum adalah harga barang saja dan belum termasuk ongkos
+                pemasangan.
               </p>
             </motion.div>
           </div>
@@ -182,13 +183,13 @@ export default function SpeedShop() {
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Why Choose Us</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Cara Kami Bekerja</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
-              KENAPA <span className="text-gradient-orange">SUPERSPEED?</span>
+              YANG PERLU <span className="text-gradient-orange">ANDA TAHU</span>
             </h2>
-            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-              Berawal dari racing team, kami paham betul kebutuhan rider dan mekanik. 
-              Setiap part yang kami jual sudah teruji di sirkuit Mandalika.
+            <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
+              Enam hal berikut sering ditanyakan sebelum orang memutuskan membeli. Kami
+              tuliskan di depan supaya Anda tidak perlu bertanya satu per satu.
             </p>
           </motion.div>
 
@@ -217,13 +218,15 @@ export default function SpeedShop() {
       <section className="py-24 tech-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Official Partners</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Kerja Sama Resmi</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
-              BRAND <span className="text-gradient-orange">KELAS DUNIA</span>
+              DUA BELAS <span className="text-gradient-orange">BRAND</span>
             </h2>
-            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-              Kami bekerja sama dengan brand otomotif roda dua terbaik di dunia. 
-              Semua produk 100% original dengan garansi resmi.
+            <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
+              Dua belas merek berikut punya perjanjian distribusi resmi dengan kami. Di luar
+              itu, katalog kami juga memuat merek yang kami impor sendiri tanpa perjanjian
+              keagenan, di antaranya Öhlins, Akrapovič, Arai, dan Dainese. Keduanya
+              sama-sama barang orisinal. Yang berbeda hanya jalur masuknya.
             </p>
           </motion.div>
 
@@ -258,33 +261,34 @@ export default function SpeedShop() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="relative aspect-[4/3] rounded-lg overflow-hidden glow-border">
-                <Image src="/images/racing-team.png" alt="Race Proven" fill className="object-cover" />
+                <Image src="/images/racing-team.png" alt="Tim balap SuperSpeed di paddock" fill className="object-cover" />
               </div>
             </motion.div>
 
             <motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-6">
-              <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Our Story</span>
+              <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Asal Usul Toko Ini</span>
               <h2 className="font-orbitron text-3xl md:text-4xl font-black leading-tight">
-                DARI SIRKUIT
+                DARI PADDOCK
                 <br />
-                <span className="text-gradient-orange">KE TOKO ANDA</span>
+                <span className="text-gradient-orange">KE ETALASE</span>
               </h2>
               <p className="text-gray-400 leading-relaxed">
-                SuperSpeed bermula sebagai racing team yang berkompetisi di kelas Superbike 
-                di Sirkuit Mandalika. Pengalaman bertahun-tahun di paddock membuat kami paham 
-                betul part mana yang berkualitas dan mana yang hanya marketing.
+                Awalnya kami hanya tim balap. Pada 2022, beberapa tim lain di paddock
+                Mandalika menitip pesanan part lewat kami karena jalur impor kami lebih
+                cepat. Permintaan itu terus bertambah sampai akhirnya kami membuka gerai
+                sendiri di Mataram pada 2023.
               </p>
               <p className="text-gray-400 leading-relaxed">
-                Kini kami hadir sebagai toko part otomotif racing terpercaya di Indonesia. 
-                Setiap part yang kami jual adalah part yang sama dengan yang kami pakai di motor 
-                balap kami. Race-tested, rider-approved.
+                Karena itu katalog kami tidak disusun berdasarkan margin, melainkan
+                berdasarkan apa yang benar benar kami pakai. Ada beberapa merek populer
+                yang sengaja tidak kami jual karena hasil pengujiannya tidak memuaskan.
               </p>
               <ul className="space-y-3">
                 {[
-                  "Part yang sama dipakai SuperSpeed Racing Team di WSBK Indonesia",
-                  "Direct import dari manufacturer — tanpa perantara",
-                  "Konsultasi teknis gratis dari mekanik berpengalaman",
-                  "Workshop pemasangan di Lombok & Jakarta",
+                  "Impor langsung tanpa perantara",
+                  "Konsultasi kecocokan part tanpa biaya",
+                  "Pemasangan di gerai Mataram dengan perjanjian",
+                  "Stok gerai Jakarta lebih terbatas, sebaiknya tanya dulu",
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-gray-300">
                     <span className="text-[#F5A623] mt-0.5">▸</span>
@@ -304,12 +308,13 @@ export default function SpeedShop() {
       <section className="py-24 tech-grid">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
-            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Product Catalog</span>
+            <span className="text-[#F5A623] text-xs font-bold uppercase tracking-[0.3em]">Sebagian Isi Katalog</span>
             <h2 className="font-orbitron text-4xl md:text-5xl font-black mt-4">
-              PART <span className="text-gradient-orange">RACING</span>
+              PRODUK <span className="text-gradient-orange">PILIHAN</span>
             </h2>
-            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">
-              Koleksi part racing terlengkap dari brand-brand ternama dunia
+            <p className="text-gray-400 mt-6 max-w-2xl mx-auto leading-relaxed">
+              Sembilan produk berikut adalah yang paling sering ditanyakan. Katalog
+              lengkapnya berisi 437 produk dan bisa Anda minta lewat WhatsApp.
             </p>
           </motion.div>
 
@@ -392,20 +397,25 @@ export default function SpeedShop() {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-6">
             <h2 className="font-orbitron text-3xl md:text-4xl font-black">
-              BUTUH PART <span className="text-gradient-orange">SPESIFIK?</span>
+              PART YANG ANDA CARI <span className="text-gradient-orange">TIDAK ADA?</span>
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Tidak menemukan part yang Anda cari? Tim kami bisa sourcing part racing apapun 
-              dari seluruh dunia. Custom order, bulk purchase, dan paket tim tersedia.
+            <p className="text-gray-400 max-w-2xl mx-auto leading-relaxed">
+              Kami bisa memesankan part di luar katalog, termasuk untuk motor lansiran lama.
+              Prosesnya memakan waktu dua sampai enam minggu tergantung negara asal barang,
+              dan kami minta uang muka lima puluh persen untuk pesanan khusus. Sebelum
+              menyetor, Anda akan menerima perkiraan harga dan tenggat yang jelas.
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
               <button className="btn-racing px-10 py-4 rounded text-sm uppercase tracking-wider">
-                WhatsApp Kami
+                Tanya lewat WhatsApp
               </button>
               <button className="btn-outline-racing px-10 py-4 rounded text-sm uppercase tracking-wider">
-                Download Katalog
+                Minta Katalog Lengkap
               </button>
             </div>
+            <p className="text-sm text-gray-500 pt-4">
+              WhatsApp +62 812-0000-0000 atau surel halo@superspeed.id
+            </p>
           </motion.div>
         </div>
       </section>
